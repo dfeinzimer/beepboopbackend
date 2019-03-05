@@ -108,16 +108,7 @@ def not_found(error=None):
 
     return resp
 
-#Get all articles
-@app.route('/', methods=['GET'])
-@basic_auth.required
-def home():
-    query = "select * from articles"
-    resp = jsonify(query_db(query))
-    resp.status_code = 200
-    resp.content_type = "application/json"
 
-    return resp
 
 #Post a new article
 @app.route('/articles/new', methods=['POST'])
