@@ -9,7 +9,7 @@ from flask import request, jsonify
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
-DATABASE = 'db.db'
+DATABASE = '../db/master.db'
 
 def get_db():
     db = getattr(g, '_database', None)

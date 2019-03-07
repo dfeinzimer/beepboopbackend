@@ -12,7 +12,7 @@ from flask_basicauth import BasicAuth
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
-DATABASE = '../project1.db'
+DATABASE = '../db/master.db'
 
 
 class auth(BasicAuth):
