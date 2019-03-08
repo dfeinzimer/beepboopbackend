@@ -12,6 +12,7 @@ Articles API Usage:
         Content-Type = "application/json"
         Method = "POST"
         Basic-Auth Required: YES
+        
         Request data format:
             {
                 "title": "",
@@ -25,20 +26,26 @@ Articles API Usage:
             content      - Main text/body of the article   (MANDATORY)
             author       - Name of author                  (MANDATORY)
             article_date - Date of article MM/DD/YYYY      (MANDATORY)
+            
         Response header(s):
             Status-Code:    201
             Content-type:   application/json 
             Location:       Will contain the URL to the newly created article
+            
         Response data:
             Empty list - []
+            
+            
     2) Get an individual article
         URL = "/articles/<ARTICLE_ID>"
         Content-Type = "application/json"
         Method = "GET"
         Basic-Auth Required: NO
+        
         Response header(s):
             Status-Code:    200
             Content-type:   application/json 
+            
         Response data:
             [
                 {
@@ -50,11 +57,14 @@ Articles API Usage:
                     "last_modified": ""
                 }
             ]
+            
+            
     3) Modify an existing article
         URL = "/articles/<ARTICLE_ID>"
         Content-Type = "application/json"
         Method = "PATCH"
         Basic-Auth Required: YES
+        
         Request data format:
             {
                 "title": "",
@@ -69,107 +79,133 @@ Articles API Usage:
             content      - Main text/body of the article   (OPTIONAL)
             author       - Name of author                  (OPTIONAL)
             article_date - Date of article MM/DD/YYYY      (OPTIONAL)
-            Response header(s):
+            
+        Response header(s):
             Status-Code:    200
             Content-type:   application/json 
-            Response data:
-                Empty list - []
+            
+        Response data:
+            Empty list - []
+            
+            
     4) Delete an article
         URL = "/articles/<ARTICLE_ID>"
         Content-Type = "application/json"
         Method = "DELETE"
         Basic-Auth Required: YES
+        
         Response header(s):
             Status-Code:    200
             Content-type:   application/json 
-            Response data:
-                Empty list - []
+            
+        Response data:
+            Empty list - []
+            
+            
     5) Get n most recent articles
         URL = "/articles/recent/<n>"
         Content-Type = "application/json"
         Method = "GET"
         Basic-Auth Required: NO
+        
         Response header(s):
             Status-Code:    200
             Content-type:   application/json 
+            
+        Response data:
             Response data:
-                Response data:
-                [
-                    {
-                        "title": "",
-                        "headline": "",
-                        "content": "",
-                        "author": "",
-                        "article_date": "",
-                        "last_modified": ""
-                    }, 
-                    ...
-                ]
+            [
+                {
+                    "title": "",
+                    "headline": "",
+                    "content": "",
+                    "author": "",
+                    "article_date": "",
+                    "last_modified": ""
+                }, 
+                ...
+            ]
+            
+            
     6) Get the meta-data for n most recent articles
         URL = "/articles/recent/meta/<n>"
         Content-Type = "application/json"
         Method = "GET"
         Basic-Auth Required: NO
+        
         Response header(s):
             Status-Code:    200
             Content-type:   application/json 
+            
+        Response data:
             Response data:
-                Response data:
-                [
-                    {
-                        "title": "",
-                        "author": "",
-                        "article_date": "",
-                        "location": "",
-                        "article_id": ""
-                    }, 
-                    ...
-                ]
+            [
+                {
+                    "title": "",
+                    "author": "",
+                    "article_date": "",
+                    "location": "",
+                    "article_id": ""
+                }, 
+                ...
+            ]
               
+
 Users API Usage:
     1) Create a user
         URL = "/users"
         Content-Type = "application/json"
         Method = "POST"
         Basic-Auth Required: NO
+        
         Request data format:
             {
                 "email": "",
                 "diplay_name": "",
                 "password": ""
             }
+            
             email        - Email to register                    (MANDATORY)
             diplay_name  - Display name for posted content      (MANDATORY)
             password     - Password for account login           (MANDATORY)
+            
         Response header(s):
             Status-Code:    201
             Content-type:   application/json 
         Response data:
             Empty list - []
+            
+            
     2) Change password
         URL = "/users"
         Content-Type = "application/json"
         Method = "PATCH"
         Basic-Auth Required: YES
+        
         Request data format:
             {
                 "email": "",
                 "password": "",
                 "new_password": ""
             }
+            
             email            - Email used for login               (MANDATORY)
             password         - Current password used to login     (MANDATORY)
             new_password     - New password for login             (MANDATORY)
+            
         Response header(s):
             Status-Code:    200
             Content-type:   application/json 
         Response data:
             Empty list - []
+            
+            
     3) Delete user
         URL = "/users"
         Content-Type = "application/json"
         Method = "DELETE"
         Basic-Auth Required: YES
+        
         Request data format:
             {
                 "email": "",
@@ -178,8 +214,10 @@ Users API Usage:
 
             email            - Email used for login               (MANDATORY)
             password         - Current password used to login     (MANDATORY)
+            
         Response header(s):
             Status-Code:    200
             Content-type:   application/json 
+            
         Response data:
             Empty list - []
