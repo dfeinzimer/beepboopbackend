@@ -1,12 +1,16 @@
 # beepboopbackend
 
-Environment: `Python 3.7 (Flask 1.0.2)`
+Python: `Python 3.7`
 
-Daniel ?
-David Feinzimer
-Roush ?
+Flask: `Flask 1.0.2`
 
+Acevedo, Daniel
 
+Feinzimer, David
+
+Roushdy, Yousef 
+
+Updated: March 9, 2019
               
 
 
