@@ -29,3 +29,7 @@ Updated: March 9, 2019
    `python -m flask run` or 
    
    `python3 -m flask run`
+
+## Running tests:
+
+1) `curl -i http://localhost:5000/users/`
