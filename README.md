@@ -16,7 +16,9 @@ Updated: March 9, 2019
 
 1) `export FLASK_APP=app.py`
 
-2) `flask run` or
+2) `export FLASK_ENV=development`
+
+3) `flask run` or
    
    `python -m flask run` or 
    
