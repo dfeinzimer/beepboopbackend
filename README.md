@@ -33,3 +33,5 @@ Updated: March 9, 2019
 ## Running tests:
 
 1) `curl -i http://localhost:5000/users/`
+
+2) `curl -i http://localhost:5000/articles/1`
