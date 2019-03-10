@@ -12,8 +12,7 @@ from flask_basicauth import BasicAuth
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
-DATABASE = '../db/master.db'
-
+DATABASE = '../../db/master.db'
 
 class auth(BasicAuth):
     def check_credentials(self, username, password):
