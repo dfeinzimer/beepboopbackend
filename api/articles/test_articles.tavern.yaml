@@ -1,40 +1,50 @@
 test_name: Articles API Usage
+
 stages:
+
   - name: Try to post an article without authenticating
     request:
-      url: http://localhost:5000/articles/
-      method: GET
+      url: http://localhost:5000/articles/new
+      json:
+        title: "Test article"
+        content: "This is a test article. The contents is for testing only."
+        author: "David Feinzimer"
+        article_date: 03/10/2019
+      method: POST
     response:
-      status_code: 200
+      status_code: 401
       body:
-        id: 1
+
   - name: Try to post an article using the wrong password
     request:
       url: http://localhost:5000/articles/
-      method: GET
+      method: POST
     response:
-      status_code: 200
+      status_code: 404
       body:
         id: 1
+
   - name: Post an article successfully
     request:
-      url: http://localhost:5000/articles/
-      method: GET
+      url: http://localhost:5000/articles/new
+      method: POST
     response:
-      status_code: 200
+      status_code: 201
       body:
         id: 1
+
   - name: Retrieve the newly posted article
     request:
-      url: http://localhost:5000/articles/
+      url: http://localhost:5000/articles/recent/1
       method: GET
     response:
       status_code: 200
       body:
         id: 1
+
   - name: Check that the newly posted article is the most recent
     request:
-      url: http://localhost:5000/articles/
+      url: http://localhost:5000/articles/recent/meta/<n>
       method: GET
     response:
       status_code: 200
