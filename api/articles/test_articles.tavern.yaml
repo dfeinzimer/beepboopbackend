@@ -2,7 +2,7 @@ test_name: Articles API Usage
 stages:
   - name: Try to post an article without authenticating
     request:
-      url: https://jsonplaceholder.typicode.com/posts/1
+      url: http://localhost:5000/articles/
       method: GET
     response:
       status_code: 200
@@ -10,7 +10,7 @@ stages:
         id: 1
   - name: Try to post an article using the wrong password
     request:
-      url: https://jsonplaceholder.typicode.com/posts/1
+      url: http://localhost:5000/articles/
       method: GET
     response:
       status_code: 200
@@ -18,7 +18,7 @@ stages:
         id: 1
   - name: Post an article successfully
     request:
-      url: https://jsonplaceholder.typicode.com/posts/1
+      url: http://localhost:5000/articles/
       method: GET
     response:
       status_code: 200
@@ -26,7 +26,7 @@ stages:
         id: 1
   - name: Retrieve the newly posted article
     request:
-      url: https://jsonplaceholder.typicode.com/posts/1
+      url: http://localhost:5000/articles/
       method: GET
     response:
       status_code: 200
@@ -34,7 +34,7 @@ stages:
         id: 1
   - name: Check that the newly posted article is the most recent
     request:
-      url: https://jsonplaceholder.typicode.com/posts/1
+      url: http://localhost:5000/articles/
       method: GET
     response:
       status_code: 200

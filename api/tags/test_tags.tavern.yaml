@@ -1,40 +1,40 @@
-test_name: Articles API Usage
+test_name: Tags API Usage
 stages:
-  - name: Try to post an article without authenticating
+  - name: Add an article with a new tag
     request:
-      url: https://jsonplaceholder.typicode.com/posts/1
+      url: http://localhost:5000/tags/
       method: GET
     response:
       status_code: 200
       body:
         id: 1
-  - name: Try to post an article using the wrong password
+  - name: List all articles with the new tag
     request:
-      url: https://jsonplaceholder.typicode.com/posts/1
+      url: http://localhost:5000/tags/
       method: GET
     response:
       status_code: 200
       body:
         id: 1
-  - name: Post an article successfully
+  - name: Add another tag to the article
     request:
-      url: https://jsonplaceholder.typicode.com/posts/1
+      url: http://localhost:5000/tags/
       method: GET
     response:
       status_code: 200
       body:
         id: 1
-  - name: Retrieve the newly posted article
+  - name: Delete one of the tags from the article
     request:
-      url: https://jsonplaceholder.typicode.com/posts/1
+      url: http://localhost:5000/tags/
       method: GET
     response:
       status_code: 200
       body:
         id: 1
-  - name: Check that the newly posted article is the most recent
+  - name: Add a tag to an article that doesn’t exist
     request:
-      url: https://jsonplaceholder.typicode.com/posts/1
+      url: http://localhost:5000/tags/
       method: GET
     response:
       status_code: 200

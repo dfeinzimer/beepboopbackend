@@ -1,40 +1,40 @@
-test_name: Articles API Usage
+test_name: Users API Usage
 stages:
-  - name: Try to post an article without authenticating
+  - name: Try to change the password for a user that does not exist
     request:
-      url: https://jsonplaceholder.typicode.com/posts/1
+      url: http://localhost:5000/users/
       method: GET
     response:
       status_code: 200
       body:
         id: 1
-  - name: Try to post an article using the wrong password
+  - name: Create a user
     request:
-      url: https://jsonplaceholder.typicode.com/posts/1
+      url: http://localhost:5000/users/
       method: GET
     response:
       status_code: 200
       body:
         id: 1
-  - name: Post an article successfully
+  - name: Change the user’s password
     request:
-      url: https://jsonplaceholder.typicode.com/posts/1
+      url: http://localhost:5000/users/
       method: GET
     response:
       status_code: 200
       body:
         id: 1
-  - name: Retrieve the newly posted article
+  - name: Delete the user
     request:
-      url: https://jsonplaceholder.typicode.com/posts/1
+      url: http://localhost:5000/users/
       method: GET
     response:
       status_code: 200
       body:
         id: 1
-  - name: Check that the newly posted article is the most recent
+  - name: Try to change the password for the deleted user
     request:
-      url: https://jsonplaceholder.typicode.com/posts/1
+      url: http://localhost:5000/users/
       method: GET
     response:
       status_code: 200
