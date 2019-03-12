@@ -4,15 +4,19 @@ Python: `Python 3.7`
 
 Flask: `Flask 1.0.2`
 
-Acevedo, Daniel
+Acevedo, Daniel: ?@csu.fullerton.edu
 
-Feinzimer, David
+Feinzimer, David: dfeinzimer@csu.fullerton.edu
 
-Roushdy, Yousef 
+Roushdy, Yousef: ?@csu.fullerton.edu
 
-Updated: March 9, 2019
+Updated: March 11, 2019 7:30 PM
               
 ## Usage:
+
+`foreman start`
+
+## Deprecated Usage: (Refactor & Removal In Progress)
 
 1) `export FLASK_APP=app.py`
 
@@ -36,9 +40,7 @@ Updated: March 9, 2019
    
    `python3 -m flask run` or
 
-   `foreman start` or
-
-## Running tests:
+## Running tests (Deprecated):
 
 1) `curl -i http://localhost:5000/users/`
 
