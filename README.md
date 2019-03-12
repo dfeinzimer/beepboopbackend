@@ -54,6 +54,8 @@ Updated: March 11, 2019 7:30 PM
 
 - Validate Procfile format: `foreman check`
 
+- `sudo pip3 install Flask-BasicAuth`
+
 
 ## Simple curl Tests:
 
