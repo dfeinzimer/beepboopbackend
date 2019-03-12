@@ -16,6 +16,17 @@ Updated: March 11, 2019 7:30 PM
 
 `foreman start`
 
+
+## Possible Problem Solutions:
+
+- `chmod +x api/articles/articles.sh`
+
+- `chmod +x api/comments/comments.sh`
+
+- `chmod +x api/tags/tags.sh`
+
+- `chmod +x api/users/users.sh`
+
 ## Deprecated Usage: (Refactor & Removal In Progress)
 
 1) `export FLASK_APP=app.py`
