@@ -17,6 +17,21 @@ Updated: March 11, 2019 7:30 PM
 `foreman start`
 
 
+## Architecture:
+
+foreman start ->
+
+                Procfile ->
+
+                           articles.sh ->
+
+                                         Configure flask app
+
+                                         Run tavern test yaml
+
+                           Repeat for each api
+
+
 ## Possible Problem Solutions:
 
 - `chmod +x api/articles/articles.sh`
