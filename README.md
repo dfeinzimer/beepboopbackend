@@ -19,17 +19,17 @@ Updated: March 11, 2019 7:30 PM
 
 ## Architecture:
 
-foreman start ->
+    foreman ->
 
-                Procfile ->
+              Procfile ->
 
-                           articles.sh ->
+                         articles.sh ->
 
-                                         Configure flask app
+                                       Configure & run Flask app
 
-                                         Run tavern test yaml
+                                       Run Tavern test yaml
 
-                           Repeat for each api
+                         Repeat for each api
 
 
 ## Possible Problem Solutions:
