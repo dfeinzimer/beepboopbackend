@@ -27,37 +27,24 @@ Updated: March 11, 2019 7:30 PM
 
 - `chmod +x api/users/users.sh`
 
-## Deprecated Usage: (Refactor & Removal In Progress)
+- `pip3 install foreman`
 
-1) `export FLASK_APP=app.py`
+- `pip3 install tavern`
 
-2) `export FLASK_ENV=development`
+- `pip3 freeze > requirements.txt`
 
-3) If anything was added to /requirements.txt
+- `pip3 install -r requirements.txt`
 
-    3a) `pip freeze > requirements.txt`
-    
-    3b) `pip install -r requirements.txt`
+- `sudo apt install ruby-foreman`
 
-4) `pip3 install foreman`
+- Validate Procfile format: `foreman check`
 
-   `pip3 install tavern`
 
-5) `sudo apt install ruby-foreman`
-
-6) `flask run` or
-   
-   `python -m flask run` or 
-   
-   `python3 -m flask run` or
-
-## Running tests (Deprecated):
+## Simple curl Tests:
 
 1) `curl -i http://localhost:5000/users/`
 
 2) `curl -i http://localhost:5000/articles/1`
-
-3) Validate Procfile format using command `foreman check`
 
 
 ## Resources
