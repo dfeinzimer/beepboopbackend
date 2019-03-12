@@ -1,0 +1,21 @@
+# # Every test file has one or more tests...
+# test_name: Make sure POST is working
+#
+# # ...and each test has one or more stages (e.g. an HTTP request)
+# stages:
+#   - name: Make sure we have the right ID
+#
+#     # Define the request to be made...
+#     request:
+#       url: http://localhost:5000/tags/new
+#       json:
+#           tag: 'c++'
+#           url: 'coding-sucks'
+#       method: POST
+#       headers:
+#         content_type: application/json
+#
+#     # ...and the expected response code and body
+#     response:
+#       status_code: 201
+#
