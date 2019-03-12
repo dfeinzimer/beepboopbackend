@@ -24,7 +24,13 @@ Updated: March 9, 2019
     
     3b) `pip install -r requirements.txt`
 
-4) `flask run` or
+4) `pip install foreman` or
+
+   `pip3 install foreman`
+
+5) `sudo apt install ruby-foreman`
+
+6) `flask run` or
    
    `python -m flask run` or 
    
