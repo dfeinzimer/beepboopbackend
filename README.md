@@ -24,9 +24,9 @@ Updated: March 9, 2019
     
     3b) `pip install -r requirements.txt`
 
-4) `pip install foreman` or
+4) `pip3 install foreman`
 
-   `pip3 install foreman`
+   `pip3 install tavern`
 
 5) `sudo apt install ruby-foreman`
 
@@ -34,10 +34,19 @@ Updated: March 9, 2019
    
    `python -m flask run` or 
    
-   `python3 -m flask run`
+   `python3 -m flask run` or
+
+   `foreman start` or
 
 ## Running tests:
 
 1) `curl -i http://localhost:5000/users/`
 
 2) `curl -i http://localhost:5000/articles/1`
+
+3) Validate Procfile format using command `foreman check`
+
+
+## Resources
+
+https://mattstauffer.com/blog/using-a-procfile-to-streamline-your-local-development/
