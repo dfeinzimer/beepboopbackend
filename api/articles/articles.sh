@@ -1,3 +1,3 @@
 export FLASK_APP=articles.py
 export FLASK_ENV=development
-flask run
+flask run -h localhost -p 3000
