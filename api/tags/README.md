@@ -1,4 +1,4 @@
-## Create a new tag
+## Create new tag
 URL = "tag/new"
 Content-Type = "application/json"
 Method = "POST"
@@ -20,7 +20,7 @@ Request data format:
 Response data:
     Empty list - []
 
-## Delete a post
+## Delete post
 URL = "/tags/delete/<url>"
 Content-Type = "application/json"
 Method = "DELETE"
