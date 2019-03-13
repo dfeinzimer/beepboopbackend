@@ -2,14 +2,37 @@ import datetime
 import hashlib
 import sqlite3
 import flask
+from flask import Flask, render_template
 from flask import g
 from flask import Response
 from flask import request, jsonify
+from flask_basicauth import BasicAuth
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
 DATABASE = '../../db/master.db'
+
+class auth(BasicAuth):
+    def check_credentials(self, username, password):
+
+        pass_hash = hashlib.md5(password.encode())
+        query = "SELECT * FROM users WHERE email = ? AND pass_hash = ?"
+        query_args = (username, pass_hash.hexdigest())
+
+        conn = sqlite3.connect(DATABASE)
+        cursor = conn.cursor()
+
+        cursor.execute(query, query_args)
+        result = cursor.fetchall()
+        conn.close()
+
+        if len(result) > 0:
+            return True
+        else:
+            return False
+
+basic_auth = auth(app)
 
 def get_db():
     db = getattr(g, '_database', None)
@@ -61,11 +84,6 @@ def close_connection(exception):
     if db is not None:
         db.close()
 
-# app.route('/', methods=['GET','POST'])
-# def home():
-#     return '''<h1>Comments microservice</h1>
-# <p>A prototype API for posting, retrieving, and deleting comments.</p>'''
-#
 
 @app.route('/comments/all', methods=['GET'])
 def comments_all():
@@ -87,7 +105,7 @@ def comments_all():
 @app.route('/comments/nth_comment/<int:nth>', methods=['GET'])
 def get_nth_comments(nth):
 
-    query = 'SELECT * FROM comments WHERE comment_id BETWEEN 0 AND ?;'
+    query = 'SELECT * FROM comments WHERE comment_date BETWEEN 0 AND ?;'
     #query = 'SELECT * FROM comments ORDER BY comment_id LIMIT ?'
     # note that ORDER BY should be by date
     query_args = (nth,)
@@ -109,7 +127,7 @@ def post_comment():
      if request.is_json:
         content = request.get_json()
 
-        query_args = (content["user_id"], content["comment"], str(datetime.date.today()))
+        query_args = (content["user_id"], content["comment"], str(datetime.datetime.now()))
         query = "INSERT INTO comments (user_id, comment, comment_date) VALUES (?, ?, ?)"
 
         result = query_db(query, query_args)
@@ -123,6 +141,7 @@ def post_comment():
 
 
 @app.route('/comments/delete/<int:comment_ID>', methods=['DELETE'])
+@basic_auth.required
 def comment_delete(comment_ID):
     query = "DELETE FROM comments WHERE comment_id = ?"
     query_args = (comment_ID,)
@@ -142,3 +161,7 @@ def page_not_found(e):
     return "<h1>404</h1><p>The resource could not be found.</p>", 404
 
 app.run()
+
+# How to test
+#DELETE - curl -i -X DELETE http://localhost:5000/comments/delete/comment_id
+#POST - use test_comments_api.tavern.yaml
