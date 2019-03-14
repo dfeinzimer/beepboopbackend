@@ -8,7 +8,7 @@ Acevedo, Daniel: ?@csu.fullerton.edu
 
 Feinzimer, David: dfeinzimer@csu.fullerton.edu
 
-Roushdy, Yousef: ?@csu.fullerton.edu
+Roushdy, Yousef: yyroushdy@csu.fullerton.edu
 
 Updated: March 11, 2019 7:30 PM
               
