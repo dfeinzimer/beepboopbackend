@@ -2,7 +2,7 @@ test_name: Comments API Usage
 stages:
   - name: Try to add a comment to an article that doesn’t exist
     request:
-      url: http://localhost:5000/comments/
+      url: http://localhost:3001/comments/
       method: GET
     response:
       status_code: 200
@@ -10,7 +10,7 @@ stages:
         id: 1
   - name: Post an anonymous comment on an article
     request:
-      url: http://localhost:5000/comments/
+      url: http://localhost:3001/comments/
       method: GET
     response:
       status_code: 200
@@ -18,7 +18,7 @@ stages:
         id: 1
   - name: Post an authenticated comment on an article
     request:
-      url: http://localhost:5000/comments/
+      url: http://localhost:3001/comments/
       method: GET
     response:
       status_code: 200
@@ -26,7 +26,7 @@ stages:
         id: 1
   - name: Check that the comments on the article were returned in order
     request:
-      url: http://localhost:5000/comments/
+      url: http://localhost:3001/comments/
       method: GET
     response:
       status_code: 200
