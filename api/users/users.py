@@ -3,13 +3,13 @@
 import datetime
 import hashlib
 import sqlite3
-import flask
+from flask import Flask
 from flask import g
 from flask import Response
 from flask import request, jsonify
 from flask_basicauth import BasicAuth
 
-app = flask.Flask(__name__)
+app = Flask(__name__)
 app.config["DEBUG"] = True
 
 DATABASE = '../../db/master.db'
@@ -140,11 +140,11 @@ def create_user():
             resp = jsonify(result)
             resp.status_code = 201
             resp.headers['Location'] = "/users"
-            return resp
+            return []
         else:
-            return result
+            return ""
     else:
-        return "Expected JSON"
+        return ""
 
 
 @app.route('/users', methods=['DELETE'])
@@ -176,7 +176,9 @@ def change_password():
 
         if user_exists(data["email"], data["password"]):
             query = "UPDATE users SET pass_hash = ? WHERE email = ? AND pass_hash = ?"
-            query_args = (hashlib.md5(data["new_password"].encode()).hexdigest(), data["email"], hashlib.md5(data["password"].encode()).hexdigest())
+            query_args = (hashlib.md5(data["new_password"].encode()).hexdigest(), 
+                          data["email"], 
+                          hashlib.md5(data["password"].encode()).hexdigest())
 
             err, result = query_db(query, query_args)
             return jsonify(result)
@@ -186,4 +188,4 @@ def change_password():
         return "Expected JSON"
 
 
-app.run()
+#app.run()

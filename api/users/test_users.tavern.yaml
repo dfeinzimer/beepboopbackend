@@ -1,42 +1,20 @@
 test_name: Users API Usage
 stages:
-  - name: Try to change the password for a user that does not exist
-    request:
-      url: http://localhost:3003/users/
-      method: GET
-    response:
-      status_code: 200
-      body:
-        id: 1
+  
   - name: Create a user
     request:
-      url: http://localhost:3003/users/
-      method: GET
+      url: http://localhost:3003/users
+      json:
+        email: miggle@gmail.com
+        display_name": mgl 
+        password": abc123
+      method: POST
+      headers:
+        content-type: application/json
     response:
-      status_code: 200
-      body:
-        id: 1
-  - name: Change the user’s password
-    request:
-      url: http://localhost:3003/users/
-      method: GET
-    response:
-      status_code: 200
-      body:
-        id: 1
-  - name: Delete the user
-    request:
-      url: http://localhost:3003/users/
-      method: GET
-    response:
-      status_code: 200
-      body:
-        id: 1
-  - name: Try to change the password for the deleted user
-    request:
-      url: http://localhost:3003/users/
-      method: GET
-    response:
-      status_code: 200
-      body:
-        id: 1
+      status_code: 201
+      headers:
+        content-type: text/html; charset=utf-8
+      connection: close
+      server: Werkzeug/0.14.1 Python/3.6.7
+      date:
