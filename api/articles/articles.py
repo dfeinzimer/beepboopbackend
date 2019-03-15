@@ -231,13 +231,6 @@ def get_recent_articles_metadata(num_of_articles):
     return resp
 
 
-#only need to initialize once
-# def init_db():
-#     with app.app_context():
-#         db = get_db()
-#         with app.open_resource('../project1_schema.sql', mode='r') as f:
-#             db.cursor().executescript(f.read())
-#         db.commit()
-# init_db()
-
-app.run()
+if __name__ == '__main__':
+    basic_auth.init_app(app)
+    app.run()

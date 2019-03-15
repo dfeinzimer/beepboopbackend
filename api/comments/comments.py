@@ -200,7 +200,11 @@ def delete_comment(comment_ID):
 def page_not_found(e):
     return "<h1>404</h1><p>The resource could not be found.</p>", 404
 
-app.run()
+
+if __name__ == '__main__':
+    basic_auth.init_app(app)
+    app.run()
+
 
 # How to test
 #DELETE - curl -i -X DELETE http://localhost:5000/comments/delete/comment_id
