@@ -1,6 +1,6 @@
 from flask import Flask, g, jsonify, Response, request
 from flask_basicauth import BasicAuth
-from .db import master as DATABASE
+#from .db import master as DATABASE
 import base64
 import bcrypt
 import datetime
@@ -11,9 +11,12 @@ import sys
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
-DATABASE.init_app(app)
-basic_auth = auth.GetAuth()
-basic_auth.init_app(app)
+#DATABASE.init_app(app)
+#basic_auth = auth.GetAuth()
+#basic_auth = auth.GetAuth()
+#basic_auth.init_app(app)
+
+DATABASE = 'db/master.db'
 
 
 class auth(BasicAuth):
@@ -30,6 +33,8 @@ class auth(BasicAuth):
             return True
         else:
             return False
+
+basic_auth = auth(app)
 
 
 def user_exists(username, password):
@@ -82,7 +87,7 @@ def query_db(query, args=(), one=False):
             resp.status_code = 409
             return True, resp
         else:
-            return not_found()
+            return False, not_found()
     return (False, rv[0] if rv else False, None) if one else False, rv
 
 
@@ -94,7 +99,7 @@ def not_found(error=None):
     }
     resp = jsonify(message)
     resp.status_code = 404
-    resp.content_type = "applciation/json"
+    resp.content_type = "application/json"
     return resp
 
 
@@ -117,11 +122,11 @@ def create_user():
             resp = jsonify(result)
             resp.status_code = 201
             resp.headers['Location'] = "/users"
-            return []
+            return resp
         else:
-            return ""
+            return result
     else:
-        return ""
+        return ('No JSON', 400, {})
 
 
 @app.route('/users', methods=['DELETE'])

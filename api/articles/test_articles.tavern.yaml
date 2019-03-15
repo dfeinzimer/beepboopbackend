@@ -15,6 +15,7 @@ stages:
       status_code: 401
 
   - name: Try to post an article using the wrong password
+    request:
       url: http://localhost:3000/articles/new
       auth:
         - dfeinzimer@gmail.com
@@ -29,6 +30,7 @@ stages:
       status_code: 401
 
   - name: Post an article successfully
+    request:
       url: http://localhost:3000/articles/new
       auth:
         - dfeinzimer@gmail.com

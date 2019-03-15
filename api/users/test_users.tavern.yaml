@@ -18,7 +18,7 @@ stages:
         content-type: application/json
 
 
-  - name: Change the password for a nonexistant user.
+  - name: Change the password for a nonexistent user.
     request:
       url: http://localhost:3003/users
       headers:
@@ -32,7 +32,7 @@ stages:
         password: na 
         new_password: abc123
     response:
-      status_code: 401
+      status_code: 404
       headers:
         content-type: application/json
 
@@ -66,6 +66,8 @@ stages:
       json:
         email: dfeinzimer@gmail.com
         password: abc1234
+      headers:
+        content-type: application/json
     response:
       status_code: 200
       headers:

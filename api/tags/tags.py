@@ -15,8 +15,8 @@ app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 FlaskCLI(app) #need this to run commands but givs an error
 
-DATABASE = 'db.db'
-#DATABASE = '../../db/master.db'
+#DATABASE = 'db.db'
+DATABASE = 'db/master.db'
 
 class auth(BasicAuth):
     def check_credentials(self, username, password):
