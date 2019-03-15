@@ -7,11 +7,16 @@ from flask import g
 from flask import Response
 from flask import request, jsonify
 from flask_basicauth import BasicAuth
+import click
+from flask.cli import FlaskCLI #this does not work but should
+#from flask.cli import AppGroup #this works
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
+FlaskCLI(app) #need this to run commands but givs an error
 
-DATABASE = '../../db/master.db'
+DATABASE = 'db.db'
+#DATABASE = '../../db/master.db'
 
 class auth(BasicAuth):
     def check_credentials(self, username, password):
@@ -156,6 +161,21 @@ def add_tag():
      else:
         return "expected JSON"
 
+
+@click.command()
+@click.argument('tag')
+@click.argument('url')
+def new_tag(tag, url):
+        query_args = (tag, url)
+        query = "INSERT INTO tags (tag, url) VALUES (?, ?)"
+
+        result = query_db(query, query_args)
+        resp = jsonify(result)
+        resp.status_code = 201
+        resp.headers['Location'] = f"/project1/{result['tag_id']}"
+        return resp
+
+
 #use postman or curl
 @app.route('/tags/existing/<url>', methods=['POST'])
 @basic_auth.required
@@ -174,11 +194,23 @@ def add_tag_existing(url):
      else:
         return "expected JSON"
 
+@click.command()
+@click.argument('url')
+@click.argument('tag')
+def add_existing_tag(url, tag):
+    query_args = (tag, url,)
+    query = "INSERT INTO tags (tag, url) VALUES (?, ?)"
+
+    result = query_db(query, query_args)
+    resp = jsonify(result)
+    resp.status_code = 201
+    resp.headers['Location'] = f"/project1/{result['tag_id']}"
+    return resp
 
 
 @app.route('/tags/delete/<url>', methods=['DELETE'])
 @basic_auth.required
-def comment_delete(url):
+def tag_delete(url):
     query = "DELETE FROM tags WHERE url = ?"
     query_args = (url,)
 
@@ -191,6 +223,15 @@ def comment_delete(url):
         resp.content_type = "application/json"
         return resp
 
+@click.command()
+@click.argument('url')
+def delete_tag(url):
+    query = "DELETE FROM tags WHERE url = ?"
+    query_args = (url,)
+
+    result = query_db(query, query_args)
+    if type(result) == flask.Response:
+        return result
 
 @app.errorhandler(404)
 def page_not_found(e):

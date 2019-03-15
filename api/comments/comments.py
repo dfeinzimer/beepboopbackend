@@ -7,9 +7,14 @@ from flask import g
 from flask import Response
 from flask import request, jsonify
 from flask_basicauth import BasicAuth
+import click
+#from flask.cli import FlaskCLI
+from flask.cli import AppGroup
+
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
+FlaskCLI(app)
 
 DATABASE = '../../db/master.db'
 
@@ -121,6 +126,17 @@ def get_nth_comments(nth):
 
     return result
 
+@click.command()
+@click.argument('nth')
+def nth_comment(nth):
+    query = 'SELECT * FROM comments WHERE comment_date BETWEEN 0 AND ?;'
+    #query = 'SELECT * FROM comments ORDER BY comment_id LIMIT ?'
+    # note that ORDER BY should be by date
+    query_args = (nth,)
+
+    resp = query_db(query, query_args)
+    result = jsonify(resp)
+
 #use postman or curl
 @app.route('/comments/post', methods=['POST'])
 def post_comment():
@@ -138,6 +154,20 @@ def post_comment():
      else:
         return "expected JSON"
 
+@click.command()
+@click.argument('user_id')
+@click.argument('comment')
+def new_comment(user_id, comment):
+
+    query_args = (user_id, comment, str(datetime.datetime.now()))
+    query = "INSERT INTO comments (user_id, comment, comment_date) VALUES (?, ?, ?)"
+
+    result = query_db(query, query_args)
+    resp = jsonify(result)
+    resp.status_code = 201
+    resp.headers['Location'] = f"/project1/{result['comment_id']}"
+    return resp
+
 
 
 @app.route('/comments/delete/<int:comment_ID>', methods=['DELETE'])
@@ -148,12 +178,22 @@ def comment_delete(comment_ID):
 
     result = query_db(query, query_args)
     if type(result) == flask.Response:
-        return result
+        return result 
     else:
         resp = jsonify(result)
         resp.status_code = 200
         resp.content_type = "application/json"
         return resp
+
+@click.command()
+@click.argument('comment_ID')
+def delete_comment(comment_ID):
+    query = "DELETE FROM comments WHERE comment_id = ?"
+    query_args = (comment_ID,)
+
+    result = query_db(query, query_args)
+    if type(result) == flask.Response:
+        return result
 
 
 @app.errorhandler(404)
