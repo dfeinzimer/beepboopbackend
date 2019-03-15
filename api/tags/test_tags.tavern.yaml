@@ -13,6 +13,8 @@ stages:
         password: "test123"
     response:
       status_code: 201
+      headers:
+        content-type: application/json
 
 
   - name: List all articles with the new tag
@@ -30,6 +32,8 @@ stages:
         - abc1234
     response:
       status_code: 201
+      headers:
+        content-type: application/json
 
 
   - name: Add a tag to an article that doesn’t exist
