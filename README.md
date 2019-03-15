@@ -1,35 +1,15 @@
 # beepboopbackend
 
-Python: `Python 3.7`
+Acevedo, Daniel
 
-Flask: `Flask 1.0.2`
+Feinzimer, David
 
-Acevedo, Daniel: ?@csu.fullerton.edu
+Roushdy, Yousef
 
-Feinzimer, David: dfeinzimer@csu.fullerton.edu
-
-Roushdy, Yousef: yyroushdy@csu.fullerton.edu
-
-Updated: March 11, 2019 7:30 PM
-              
+          
 ## Usage:
 
 `foreman start`
-
-
-## Architecture:
-
-    foreman ->
-
-              Procfile ->
-
-                         articles.sh ->
-
-                                       Configure & run Flask app
-
-                                       Run Tavern test yaml
-
-                         Repeat for each api
 
 
 ## Possible Problem Solutions:
@@ -52,16 +32,9 @@ Updated: March 11, 2019 7:30 PM
 
 - `sudo apt install ruby-foreman`
 
-- Validate Procfile format: `foreman check`
+- `foreman check`
 
 - `sudo pip3 install Flask-BasicAuth`
-
-
-## Simple curl Tests:
-
-1) `curl -i http://localhost:5000/users/`
-
-2) `curl -i http://localhost:5000/articles/1`
 
 
 ## Resources

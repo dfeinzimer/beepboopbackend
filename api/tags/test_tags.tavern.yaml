@@ -1,42 +1,36 @@
 test_name: Tags API Usage
 stages:
+
+
   - name: Add an article with a new tag
     request:
-      url: http://localhost:3002/tags/
-      method: GET
+      url: http://localhost:3002/tag/new
+      method: POST
+      json:
+        tag: #frimar15045504
+        url: http://google.com
+        email: "test@gmail.com"
+        password: "test123"
     response:
-      status_code: 200
-      body:
-        id: 1
+      status_code: 201
+
+
   - name: List all articles with the new tag
-    request:
-      url: http://localhost:3002/tags/
-      method: GET
-    response:
-      status_code: 200
-      body:
-        id: 1
+
+
   - name: Add another tag to the article
-    request:
-      url: http://localhost:3002/tags/
-      method: GET
-    response:
-      status_code: 200
-      body:
-        id: 1
+
+
   - name: Delete one of the tags from the article
     request:
-      url: http://localhost:3002/tags/
-      method: GET
+      url: http://localhost:3002/tags/delete/
+      method: DELETE
+      auth:
+        - dfeinzimer@gmail.com
+        - abc1234
     response:
-      status_code: 200
-      body:
-        id: 1
+      status_code: 201
+
+
   - name: Add a tag to an article that doesn’t exist
-    request:
-      url: http://localhost:3002/tags/
-      method: GET
-    response:
-      status_code: 200
-      body:
-        id: 1
+
