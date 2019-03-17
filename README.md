@@ -1,10 +1,10 @@
 # beepboopbackend
 
-Acevedo, Daniel
+Acevedo, Daniel: DEV 2
 
-Feinzimer, David
+Feinzimer, David: OPS
 
-Roushdy, Yousef
+Roushdy, Yousef: DEV 1
 
           
 ## Usage:
