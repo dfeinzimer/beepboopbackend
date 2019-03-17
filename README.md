@@ -39,4 +39,10 @@ Roushdy, Yousef
 
 ## Resources
 
-https://mattstauffer.com/blog/using-a-procfile-to-streamline-your-local-development/
+HTTP Status Codes
+
+    https://www.restapitutorial.com/httpstatuscodes.html
+
+Procfiles
+
+    https://mattstauffer.com/blog/using-a-procfile-to-streamline-your-local-development/
