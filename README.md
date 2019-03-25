@@ -9,27 +9,6 @@ Roushdy, Yousef: DEV 1
           
 ## Usage:
 
-
-`export FLASK_APP=api_articles.py`
-
-or
-
-`export FLASK_APP=api_comments.py`
-
-or
-
-`export FLASK_APP=api_tags.py`
-
-or
-
-`export FLASK_APP=api_users.py`
-
-and
-
-`export FLASK_ENV=development`
-
-and
-
 `foreman start`
 
 
