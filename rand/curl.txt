@@ -1,1 +1,0 @@
-curl --header "Content-Type: application/json"   --request POST   --data '{"email":"dfeinzimer@gmail.com","display_name":"dtf","password":"dtf123"}'   http://localhost:3003/users
