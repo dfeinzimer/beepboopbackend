@@ -1,26 +1,22 @@
 # beepboopbackend
 
-Acevedo, Daniel: DEV 2
+Acevedo, Daniel     DEV 2     Tags, Comments, Flask CLI DB commands
 
-Feinzimer, David: OPS
+Feinzimer, David    OPS       Procfile, Foreman, Tuffix, Tavern tests
 
-Roushdy, Yousef: DEV 1
+Roushdy, Yousef     DEV 1     Articles, Users, HTTP Basic Auth.
 
-          
+
+
 ## Usage:
 
-`foreman start`
+Start the services: `foreman start`
+
+Run the tests: `py.test`
+
 
 
 ## Possible Problem Solutions:
-
-- `chmod +x api/articles/articles.sh`
-
-- `chmod +x api/comments/comments.sh`
-
-- `chmod +x api/tags/tags.sh`
-
-- `chmod +x api/users/users.sh`
 
 - `pip3 install foreman`
 
@@ -35,6 +31,7 @@ Roushdy, Yousef: DEV 1
 - `foreman check`
 
 - `sudo pip3 install Flask-BasicAuth`
+
 
 
 ## Resources
