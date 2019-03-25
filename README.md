@@ -1,10 +1,10 @@
 # beepboopbackend
 
-Acevedo, Daniel     DEV 2     Tags, Comments, Flask CLI DB commands
-
-Feinzimer, David    OPS       Procfile, Foreman, Tuffix, Tavern tests
-
-Roushdy, Yousef     DEV 1     Articles, Users, HTTP Basic Auth.
+| Member           | Role  | Ownership                               |
+|------------------|-------|-----------------------------------------|
+| Acevedo, Daniel  | DEV 2 | Tags, Comments, Flask CLI DB commands   |
+| Feinzimer, David | OPS   | Procfile, Foreman, Tuffix, Tavern tests |
+| Roushdy, Yousef  | DEV 1 | Articles, Users, HTTP Basic Auth.       |
 
 
 
