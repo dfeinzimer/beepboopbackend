@@ -1,0 +1,69 @@
+# beepboopbackend
+
+Acevedo, Daniel: DEV 2
+
+Feinzimer, David: OPS
+
+Roushdy, Yousef: DEV 1
+
+          
+## Usage:
+
+
+`export FLASK_APP=api_articles.py`
+
+or
+
+`export FLASK_APP=api_comments.py`
+
+or
+
+`export FLASK_APP=api_tags.py`
+
+or
+
+`export FLASK_APP=api_users.py`
+
+and
+
+`export FLASK_ENV=development`
+
+and
+
+`foreman start`
+
+
+## Possible Problem Solutions:
+
+- `chmod +x api/articles/articles.sh`
+
+- `chmod +x api/comments/comments.sh`
+
+- `chmod +x api/tags/tags.sh`
+
+- `chmod +x api/users/users.sh`
+
+- `pip3 install foreman`
+
+- `pip3 install tavern`
+
+- `pip3 freeze > requirements.txt`
+
+- `pip3 install -r requirements.txt`
+
+- `sudo apt install ruby-foreman`
+
+- `foreman check`
+
+- `sudo pip3 install Flask-BasicAuth`
+
+
+## Resources
+
+HTTP Status Codes
+
+    https://www.restapitutorial.com/httpstatuscodes.html
+
+Procfiles
+
+    https://mattstauffer.com/blog/using-a-procfile-to-streamline-your-local-development/

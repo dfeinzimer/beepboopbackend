@@ -1,0 +1,61 @@
+test_name: Comments API Usage
+stages:
+
+
+  - name: Add comment to nonexistant article
+    request:
+      url: http://localhost:3001/comments/post
+      method: POST
+      auth:
+        - dfeinzimer@gmail.com
+        - abc123
+      json:
+        user_id: dfeinzimer@gmail.com
+        comment: Test comment
+    response:
+      status_code: 201
+      headers:
+        content-type: application/json
+
+
+  - name: Post an anonymous comment on an article
+    request:
+      url: http://localhost:3001/comments/post
+      method: POST
+      json:
+        comment: Test comment
+    response:
+      status_code: 201
+      headers:
+        content-type: application/json
+
+
+  - name: Post an authenticated comment on an article
+    request:
+      url: http://localhost:3001/comments/post
+      method: POST
+      auth:
+        - dfeinzimer@gmail.com
+        - abc123
+      json:
+        user_id: dfeinzimer@gmail.com
+        comment: Test comment
+    response:
+      status_code: 201
+      headers:
+        content-type: application/json
+
+
+- name: Check that the comments on the article were returned in order
+    request:
+      url: http://localhost:3001/comments/nth_comment/<int>
+      method: GET
+    response:
+      status_code: 200
+      headers:
+        content-type: application/json
+      body:
+        comment: 
+        comment_data:
+        comment_id:
+        user_id:

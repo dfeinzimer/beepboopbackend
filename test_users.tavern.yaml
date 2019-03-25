@@ -1,0 +1,93 @@
+test_name: Users API Usage
+stages:
+  
+
+  - name: Create a new user.
+    request:
+      url: http://localhost:3003/users
+      json:
+        email: dfeinzimer@gmail.com
+        display_name: dtf 
+        password: abc123
+      method: POST
+      headers:
+        content-type: text/html; charset=utf-8
+    response:
+      status_code: 200
+      headers:
+        content-type: text/html; charset=utf-8
+
+
+  - name: Change the password for a nonexistent user.
+    request:
+      url: http://localhost:3003/users
+      headers:
+        content-type: text/html; charset=utf-8
+      method: PATCH
+      auth:
+        - dfeinzimer@gmail.com
+        - abc123 
+      json:
+        email: doesntexist@gmail.com
+        password: na 
+        new_password: abc123
+    response:
+      status_code: 200
+      headers:
+        content-type: text/html; charset=utf-8
+
+  
+  - name: Change the password for a user.
+    request:
+      url: http://localhost:3003/users
+      headers:
+        content-type: text/html; charset=utf-8
+      method: PATCH
+      auth:
+        - dfeinzimer@gmail.com
+        - abc123 
+      json:
+        email: dfeinzimer@gmail.com
+        password: abc123 
+        new_password: abc1234
+    response:
+      status_code: 200
+      headers:
+        content-type: text/html; charset=utf-8
+
+
+  - name: Delete the user
+    request:
+      url: http://localhost:3003/users
+      method: DELETE
+      auth:
+        - dfeinzimer@gmail.com
+        - abc1234
+      json:
+        email: dfeinzimer@gmail.com
+        password: abc1234
+      headers:
+        content-type: text/html; charset=utf-8
+    response:
+      status_code: 401
+      headers:
+        content-type: text/html; charset=utf-8
+
+
+  - name: Try to change the password for the deleted user
+    request:
+      url: http://localhost:3003/users
+      headers:
+        content-type: text/html; charset=utf-8
+      method: PATCH
+      auth:
+        - dfeinzimer@gmail.com
+        - abc1234 
+      json:
+        email: dfeinzimer@gmail.com
+        password: abc1234 
+        new_password: abc12345
+    response:
+      status_code: 401
+      headers:
+        content-type: text/html; charset=utf-8
