@@ -28,6 +28,8 @@ Run the tests: `py.test`
 
 - `sudo apt install ruby-foreman`
 
+- `sudo apt install --yes nginx-extras`
+
 - `foreman check`
 
 - `sudo pip3 install Flask-BasicAuth`
