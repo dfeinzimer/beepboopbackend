@@ -47,3 +47,7 @@ HTTP Status Codes
 Procfiles
 
     https://mattstauffer.com/blog/using-a-procfile-to-streamline-your-local-development/
+
+Nginx auth_request module
+
+    https://docs.nginx.com/nginx/admin-guide/security-controls/configuring-subrequest-authentication/
