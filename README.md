@@ -18,6 +18,8 @@ Run the tests: `py.test`
 
 ## Possible Problem Solutions:
 
+- `foreman check`
+
 - `pip3 install foreman`
 
 - `pip3 install tavern`
@@ -30,9 +32,9 @@ Run the tests: `py.test`
 
 - `sudo apt install --yes nginx-extras`
 
-- `foreman check`
-
 - `sudo pip3 install Flask-BasicAuth`
+
+- `sudo service nginx restart`
 
 
 
