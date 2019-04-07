@@ -1,19 +1,41 @@
 # https://pythontic.com/database/sqlite/drop%20table
 
-# import the sqlite3 module
+
+
 import sqlite3
 
-# Connect to the demo database
-connection  = sqlite3.connect("database_master.db")
 
-# Get a cursor object
+
+connection  = sqlite3.connect("../db/articles.db")
 cursor = connection.cursor()
+dropTableStatement = "DROP TABLE articles"
+cursor.execute(dropTableStatement)
+connection.close()
+print("articles table dropped",'\n')
 
-# Execute the DROP Table SQL statement
+
+
+connection  = sqlite3.connect("../db/comments.db")
+cursor = connection.cursor()
+dropTableStatement = "DROP TABLE comments"
+cursor.execute(dropTableStatement)
+connection.close()
+print("comments table dropped",'\n')
+
+
+
+connection  = sqlite3.connect("../db/tags.db")
+cursor = connection.cursor()
+dropTableStatement = "DROP TABLE tags"
+cursor.execute(dropTableStatement)
+connection.close()
+print("tags table dropped",'\n')
+
+
+
+connection  = sqlite3.connect("../db/users.db")
+cursor = connection.cursor()
 dropTableStatement = "DROP TABLE users"
 cursor.execute(dropTableStatement)
-
-# Close the connection object
 connection.close()
-
-print("Database cleaned, please recreate and refill with data")
+print("users table dropped",'\n')
