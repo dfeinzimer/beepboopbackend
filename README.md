@@ -24,6 +24,8 @@ Clean the databases: `cd db/cmd/ && python3 destroy_all.py`
 
 ## Things to install:
 
+- `pip3 install py-bcrypt`
+
 - `pip3 install tavern`
 
 - `pip3 install foreman`
