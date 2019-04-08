@@ -10,9 +10,15 @@
 
 ## Usage:
 
-Start the services: `foreman start`
+Create the databases: `cd db/cmd/ && python3 create_all.py`
+
+Fill the databases: `python3 fill_all.py`
+
+Start the services: `cd ../.. && foreman start`
 
 Run the tests: `py.test`
+
+Clean the databases: `cd db/cmd/ && python3 destroy_all.py`
 
 
 
