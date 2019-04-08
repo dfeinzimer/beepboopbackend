@@ -42,6 +42,8 @@ Clean the databases: `cd db/cmd/ && python3 destroy_all.py`
 
 ## Possible Problem Solutions:
 
+- Stuck processes: `sudo killall -9 foreman flask`
+
 - `foreman check`
 
 - `pip3 freeze > requirements.txt`
