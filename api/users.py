@@ -16,7 +16,7 @@ app.config["DEBUG"] = True
 #basic_auth = auth.GetAuth()
 #basic_auth.init_app(app)
 
-DATABASE = 'database_master.db'
+DATABASE = '../db/db/users.db'
 
 
 class auth(BasicAuth):

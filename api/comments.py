@@ -15,7 +15,7 @@ from flask.cli import AppGroup
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
-DATABASE = 'database_master.db'
+DATABASE = '../db/db/comments.db'
 
 class auth(BasicAuth):
     def check_credentials(self, username, password):

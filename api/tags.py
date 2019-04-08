@@ -13,8 +13,7 @@ import click
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
-#DATABASE = 'db.db'
-DATABASE = 'database_master.db'
+DATABASE = '../db/db/tags.db'
 
 class auth(BasicAuth):
     def check_credentials(self, username, password):
