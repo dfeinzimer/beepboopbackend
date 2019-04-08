@@ -14,7 +14,7 @@ conn.execute('CREATE TABLE IF NOT EXISTS `articles`\
    `content` text NOT NULL,\
    `headline` text,\
    `author` text NOT NULL,\
-   `article`_date text NOT NULL,\
+   `article_date` text NOT NULL,\
    `last_modified` text NOT NULL);'
 )
 conn.close()
