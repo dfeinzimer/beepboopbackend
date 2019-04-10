@@ -2,11 +2,9 @@ from flask import Flask, g, jsonify, Response, request
 from flask_basicauth import BasicAuth
 #from .db import master as DATABASE
 import base64
-import bcrypt
 import datetime
 import hashlib
 import sqlite3
-import sys
 
 
 app = Flask(__name__)
@@ -102,6 +100,16 @@ def not_found(error=None):
     resp.content_type = "application/json"
     return resp
 
+def unauth():
+    message = {
+            'status': 401,
+            'message': 'Unauthorized'
+    }
+    resp = jsonify(message)
+    resp.status_code = 401
+    resp.content_type = "application/json"
+    return resp
+
 
 @app.route('/', methods=['GET'])
 def get_all():
@@ -130,7 +138,7 @@ def create_user():
 
 
 @app.route('/users', methods=['DELETE'])
-@basic_auth.required
+#@basic_auth.required
 def remove_user():
     if request.is_json:
         data = request.get_json()
@@ -146,7 +154,7 @@ def remove_user():
 
 
 @app.route('/users', methods=['PATCH'])
-@basic_auth.required
+#@basic_auth.required
 def change_password():
     if request.is_json:
         data = request.get_json()
@@ -162,6 +170,17 @@ def change_password():
             return not_found()
     else:
         return "Expected JSON"
+
+
+@app.route('/auth', methods=['GET'])
+@basic_auth.required
+def auth():
+    data = request.authorization
+
+    if user_exists(data["username"], data["password"]):
+        return jsonify()
+    else:
+        return unauth()
 
 
 if __name__ == '__main__':

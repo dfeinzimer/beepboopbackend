@@ -16,7 +16,6 @@ app.config["DEBUG"] = True
 DATABASE = '../db/db/articles.db'
 
 
-
 class auth(BasicAuth):
     def check_credentials(self, username, password):
 
@@ -110,16 +109,24 @@ def not_found(error=None):
     return resp
 
 
+#Get all articles
+@app.route('/articles', methods=['GET'])
+def all_articles():
+    query = "SELECT * FROM articles"
+    resp = query_db(query)
+    result = jsonify(resp)
+
+    return result
+
 
 #Post a new article
 @app.route('/articles/new', methods=['POST'])
-@basic_auth.required
 def new_article():
     if request.is_json:
         content = request.get_json()
 
-        query_args = (content["title"], content["content"], content["headline"], content["author"], content["article_date"], str(datetime.date.today()))
-        query = "INSERT INTO articles (title, content, headline, author, article_date, last_modified) VALUES (?, ?, ?, ?, ?, ?)"
+        query_args = (content["title"], content["content"], content["headline"], content["author"], content["article_date"], str(datetime.date.today()), content['user_display_name'])
+        query = "INSERT INTO articles (title, content, headline, author, article_date, last_modified, user_display_name) VALUES (?, ?, ?, ?, ?, ?, ?)"
 
         result = query_db(query, query_args)
         resp = jsonify(result)
@@ -151,7 +158,6 @@ def get_article(article_ID):
 
 #edit an individual article
 @app.route('/articles/<article_ID>', methods=['PATCH'])
-@basic_auth.required
 def edit_article(article_ID):
 
     if request.is_json:
@@ -184,7 +190,6 @@ def edit_article(article_ID):
 
 #delete an individual article
 @app.route('/articles/<article_ID>', methods=['DELETE'])
-@basic_auth.required
 def delete_article(article_ID):
     query = "DELETE FROM articles WHERE article_id = ?"
     query_args = (article_ID,)

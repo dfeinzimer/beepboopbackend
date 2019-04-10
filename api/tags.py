@@ -13,28 +13,20 @@ import click
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
+#DATABASE = 'db.db'
 DATABASE = '../db/db/tags.db'
 
-class auth(BasicAuth):
-    def check_credentials(self, username, password):
 
-        pass_hash = hashlib.md5(password.encode())
-        query = "SELECT * FROM users WHERE email = ? AND pass_hash = ?"
-        query_args = (username, pass_hash.hexdigest())
-
-        conn = sqlite3.connect(DATABASE)
-        cursor = conn.cursor()
-
-        cursor.execute(query, query_args)
-        result = cursor.fetchall()
-        conn.close()
-
-        if len(result) > 0:
-            return True
-        else:
-            return False
-
-basic_auth = auth(app)
+@app.errorhandler(404)
+def not_found(error=None):
+    message = {
+            'status': 404,
+            'message': 'Not Found: ' + request.url,
+    }
+    resp = jsonify(message)
+    resp.status_code = 404
+    resp.content_type = "application/json"
+    return resp
 
 def get_db():
     db = getattr(g, '_database', None)
@@ -142,7 +134,6 @@ def retrive_urls(tag):
 
 #use postman or curl
 @app.route('/tags/new', methods=['POST'])
-@basic_auth.required
 def add_tag():
      if request.is_json:
         content = request.get_json()
@@ -175,7 +166,6 @@ def new_tag(tag, url):
 
 #use postman or curl
 @app.route('/tags/existing/<url>', methods=['POST'])
-@basic_auth.required
 def add_tag_existing(url):
      if request.is_json:
         content = request.get_json()
@@ -206,7 +196,6 @@ def add_existing_tag(url, tag):
 
 
 @app.route('/tags/delete/<url>', methods=['DELETE'])
-@basic_auth.required
 def tag_delete(url):
     query = "DELETE FROM tags WHERE url = ?"
     query_args = (url,)
@@ -236,7 +225,6 @@ def page_not_found(e):
 
 
 if __name__ == '__main__':
-    basic_auth.init_app(app)
     app.run()
 
 

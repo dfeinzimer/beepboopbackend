@@ -17,26 +17,17 @@ app.config["DEBUG"] = True
 
 DATABASE = '../db/db/comments.db'
 
-class auth(BasicAuth):
-    def check_credentials(self, username, password):
 
-        pass_hash = hashlib.md5(password.encode())
-        query = "SELECT * FROM users WHERE email = ? AND pass_hash = ?"
-        query_args = (username, pass_hash.hexdigest())
-
-        conn = sqlite3.connect(DATABASE)
-        cursor = conn.cursor()
-
-        cursor.execute(query, query_args)
-        result = cursor.fetchall()
-        conn.close()
-
-        if len(result) > 0:
-            return True
-        else:
-            return False
-
-basic_auth = auth(app)
+@app.errorhandler(404)
+def not_found(error=None):
+    message = {
+            'status': 404,
+            'message': 'Not Found: ' + request.url,
+    }
+    resp = jsonify(message)
+    resp.status_code = 404
+    resp.content_type = "application/json"
+    return resp
 
 def get_db():
     db = getattr(g, '_database', None)
@@ -49,6 +40,7 @@ def get_db():
 
     db.row_factory = make_dicts
     return db
+
 
 def query_db(query, args=(), one=False):
     try:
@@ -142,8 +134,8 @@ def post_comment():
      if request.is_json:
         content = request.get_json()
 
-        query_args = (content["user_id"], content["comment"], str(datetime.datetime.now()))
-        query = "INSERT INTO comments (user_id, comment, comment_date) VALUES (?, ?, ?)"
+        query_args = (content["user_display_name"], content["comment"], str(datetime.datetime.now()))
+        query = "INSERT INTO comments (user_display_name, comment, comment_date) VALUES (?, ?, ?)"
 
         result = query_db(query, query_args)
         resp = jsonify(result)
@@ -154,12 +146,12 @@ def post_comment():
         return "expected JSON"
 
 @click.command()
-@click.argument('user_id')
+@click.argument('user_display_name')
 @click.argument('comment')
-def new_comment(user_id, comment):
+def new_comment(user_display_name, comment):
 
-    query_args = (user_id, comment, str(datetime.datetime.now()))
-    query = "INSERT INTO comments (user_id, comment, comment_date) VALUES (?, ?, ?)"
+    query_args = (user_display_name, comment, str(datetime.datetime.now()))
+    query = "INSERT INTO comments (user_display_name, comment, comment_date) VALUES (?, ?, ?)"
 
     result = query_db(query, query_args)
     resp = jsonify(result)
@@ -170,7 +162,6 @@ def new_comment(user_id, comment):
 
 
 @app.route('/comments/delete/<int:comment_ID>', methods=['DELETE'])
-@basic_auth.required
 def comment_delete(comment_ID):
     query = "DELETE FROM comments WHERE comment_id = ?"
     query_args = (comment_ID,)
@@ -201,7 +192,6 @@ def page_not_found(e):
 
 
 if __name__ == '__main__':
-    basic_auth.init_app(app)
     app.run()
 
 
