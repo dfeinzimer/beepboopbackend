@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+
+
 import datetime
 import hashlib
 import sqlite3
@@ -10,12 +13,15 @@ from flask_basicauth import BasicAuth
 import click
 #from flask.cli import FlaskCLI
 from flask.cli import AppGroup
+import os
+import string
 
+
+PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
+DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'comments.db')
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
-
-DATABASE = '../db/db/comments.db'
 
 
 @app.errorhandler(404)
@@ -98,13 +104,34 @@ def comments_all():
 
     return result
 
-@app.route('/comments/nth_comment/<int:nth>', methods=['GET'])
-def get_nth_comments(nth):
 
-    query = 'SELECT * FROM comments WHERE comment_date BETWEEN 0 AND ?;'
-    #query = 'SELECT * FROM comments ORDER BY comment_id LIMIT ?'
-    # note that ORDER BY should be by date
-    query_args = (nth,)
+@app.route('/comments/count/<url>', methods=['GET'])
+def comments_count(url):
+
+    new_url = url.replace('=', '/')
+
+    query = 'SELECT count(*) as count FROM comments WHERE article_url = ?;'
+    query_args = (new_url,)
+
+    resp = query_db(query, query_args)
+    result = jsonify(resp)
+
+    if len(resp) > 0:
+        result.status_code = 200
+        result.content_type = "application/json"
+    else:
+        return not_found()
+
+    return result
+
+
+@app.route('/comments/<n>/<article_url>', methods=['GET'])
+def get_nth_comments(n, article_url):
+
+    new_url = article_url.replace('=', '/')
+
+    query = "SELECT * FROM comments WHERE article_url = ? ORDER BY comment_date DESC LIMIT ?"
+    query_args = (new_url, n)
 
     resp = query_db(query, query_args)
     result = jsonify(resp)
@@ -129,13 +156,13 @@ def nth_comment(nth):
     result = jsonify(resp)
 
 #use postman or curl
-@app.route('/comments/post', methods=['POST'])
+@app.route('/comments', methods=['POST'])
 def post_comment():
      if request.is_json:
         content = request.get_json()
 
-        query_args = (content["user_display_name"], content["comment"], str(datetime.datetime.now()))
-        query = "INSERT INTO comments (user_display_name, comment, comment_date) VALUES (?, ?, ?)"
+        query_args = (content["user_display_name"], content["comment"], content["article_url"], str(datetime.datetime.now()))
+        query = "INSERT INTO comments (user_display_name, comment, article_url, comment_date) VALUES (?, ?, ?, ?)"
 
         result = query_db(query, query_args)
         resp = jsonify(result)
@@ -161,7 +188,7 @@ def new_comment(user_display_name, comment):
 
 
 
-@app.route('/comments/delete/<int:comment_ID>', methods=['DELETE'])
+@app.route('/comments/<int:comment_ID>', methods=['DELETE'])
 def comment_delete(comment_ID):
     query = "DELETE FROM comments WHERE comment_id = ?"
     query_args = (comment_ID,)

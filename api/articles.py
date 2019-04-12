@@ -1,4 +1,5 @@
-#!/usr/bin/env python3.6
+#!/usr/bin/python3
+
 
 import datetime
 import hashlib
@@ -8,34 +9,13 @@ from flask import g
 from flask import Response
 from flask import request, jsonify
 from flask_basicauth import BasicAuth
+import os
 
+PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
+DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'articles.db')
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
-
-DATABASE = '../db/db/articles.db'
-
-
-class auth(BasicAuth):
-    def check_credentials(self, username, password):
-
-        pass_hash = hashlib.md5(password.encode())
-        query = "SELECT * FROM users WHERE email = ? AND pass_hash = ?"
-        query_args = (username, pass_hash.hexdigest())
-
-        conn = sqlite3.connect(DATABASE)
-        cursor = conn.cursor()
-
-        cursor.execute(query, query_args)
-        result = cursor.fetchall()
-        conn.close()
-
-        if len(result) > 0:
-            return True
-        else:
-            return False
-
-basic_auth = auth(app)
 
 
 #gets a connection to our DB
@@ -120,7 +100,7 @@ def all_articles():
 
 
 #Post a new article
-@app.route('/articles/new', methods=['POST'])
+@app.route('/articles', methods=['POST'])
 def new_article():
     if request.is_json:
         content = request.get_json()
@@ -220,14 +200,12 @@ def get_recent_articles(num_of_articles):
 #Get n most recent articles meta data
 @app.route('/articles/recent/meta/<num_of_articles>', methods=['GET'])
 def get_recent_articles_metadata(num_of_articles):
-    query = "SELECT article_id, title, author, article_date FROM articles ORDER BY article_date DESC LIMIT ?"
+    query = "SELECT article_id, title, author, user_display_name, article_date FROM articles ORDER BY article_date DESC LIMIT ?"
     query_args = (num_of_articles,)
 
     result = query_db(query, query_args)
-    print(result)
 
     for d in result:
-        print(d)
         article_id = d["article_id"]
         d["location"] = f"/articles/{article_id}"
 
@@ -238,5 +216,4 @@ def get_recent_articles_metadata(num_of_articles):
 
 
 if __name__ == '__main__':
-    basic_auth.init_app(app)
     app.run()

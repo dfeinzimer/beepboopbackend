@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+
+
 from flask import Flask, g, jsonify, Response, request
 from flask_basicauth import BasicAuth
 #from .db import master as DATABASE
@@ -5,6 +8,10 @@ import base64
 import datetime
 import hashlib
 import sqlite3
+import os
+
+PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
+DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'users.db')
 
 
 app = Flask(__name__)
@@ -14,7 +21,7 @@ app.config["DEBUG"] = True
 #basic_auth = auth.GetAuth()
 #basic_auth.init_app(app)
 
-DATABASE = '../db/db/users.db'
+#DATABASE = '../db/db/users.db'
 
 
 class auth(BasicAuth):
@@ -111,14 +118,14 @@ def unauth():
     return resp
 
 
-@app.route('/', methods=['GET'])
+@app.route('/users', methods=['GET'])
 def get_all():
     query = "SELECT * FROM users"
     err, result = query_db(query)
     return jsonify(result)
 
 
-@app.route('/users', methods=['POST'])
+@app.route('/users/new', methods=['POST'])
 def create_user():
     if request.is_json:
         data = request.get_json()
@@ -175,12 +182,13 @@ def change_password():
 @app.route('/auth', methods=['GET'])
 @basic_auth.required
 def auth():
-    data = request.authorization
+    return ""
+    # data = request.authorization
 
-    if user_exists(data["username"], data["password"]):
-        return jsonify()
-    else:
-        return unauth()
+    # if user_exists(data["username"], data["password"]):
+    #     return jsonify()
+    # else:
+    #     return unauth()
 
 
 if __name__ == '__main__':

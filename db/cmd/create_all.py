@@ -29,6 +29,7 @@ conn.execute('CREATE TABLE IF NOT EXISTS `comments`\
   (`comment_id`   INTEGER PRIMARY KEY AUTOINCREMENT,\
    `user_display_name`      TEXT NOT NULL,\
    `comment`      TEXT NOT NULL,\
+   `article_url` TEXT NOT NULL,\
    `comment_date` TEXT NOT NULL);'
 )
 conn.close()

@@ -22,7 +22,7 @@ else:
 conn = sqlite3.connect('../db/comments.db')
 if(conn != None):
   print("Opened comments.db successfully");
-  conn.execute("INSERT INTO comments VALUES(null,'dfeinzimer','What a great article','4/7/19')")
+  conn.execute("INSERT INTO comments VALUES(null,'dfeinzimer','What a great article', 'articles/1', '4/7/19')")
   conn.commit()
   conn.close()
   print("comments table filled successfully",'\n');
@@ -34,9 +34,9 @@ else:
 conn = sqlite3.connect('../db/tags.db')
 if(conn != None):
   print("Opened tags.db successfully");
-  conn.execute("INSERT INTO tags VALUES(null,'apples','test.com')")
-  conn.execute("INSERT INTO tags VALUES(null,'bananas','test.com')")
-  conn.execute("INSERT INTO tags VALUES(null,'corn','test.com')")
+  conn.execute("INSERT INTO tags VALUES(null,'apples','articles/1')")
+  conn.execute("INSERT INTO tags VALUES(null,'bananas','articles/1')")
+  conn.execute("INSERT INTO tags VALUES(null,'corn','articles/1')")
   conn.commit()
   conn.close()
   print("tags table filled successfully",'\n');
@@ -47,7 +47,7 @@ else:
 
 conn = sqlite3.connect('../db/users.db')
 if(conn != None):
-  print("Opened users.db successfully");
+  print("Opened users.db successfully");                        #test@email.com
   conn.execute("INSERT INTO users VALUES(null,'test@email.com','93942e96f5acd83e2e047ad8fe03114d','dfeinzimer')")
   conn.commit()
   conn.close()

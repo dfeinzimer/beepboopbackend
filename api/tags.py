@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import datetime
 import hashlib
 import sqlite3
@@ -8,13 +10,15 @@ from flask import Response
 from flask import request, jsonify
 from flask_basicauth import BasicAuth
 import click
+import os
 #from flask.cli import AppGroup #this works
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
-#DATABASE = 'db.db'
-DATABASE = '../db/db/tags.db'
+
+PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
+DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'tags.db')
 
 
 @app.errorhandler(404)
@@ -96,11 +100,13 @@ def comments_all():
     return result
 
 
-@app.route('/tags/from/<url>', methods=['GET'])
-def retrive_tags(url):
+@app.route('/tags/url/<article_url>', methods=['GET'])
+def retrive_tags(article_url):
+
+    new_url = article_url.replace('=', '/')
 
     query = 'SELECT * FROM tags Where url = ?;'
-    query_args = (url,)
+    query_args = (new_url,)
 
     resp = query_db(query, query_args)
     result = jsonify(resp)
@@ -113,12 +119,10 @@ def retrive_tags(url):
 
     return result
 
-@app.route('/tags/url/<tag>', methods=['GET'])
+@app.route('/tags/tag/<tag>', methods=['GET'])
 def retrive_urls(tag):
 
     query = 'SELECT * FROM tags WHERE tag = ?;'
-    #query = 'SELECT * FROM comments ORDER BY tag_id LIMIT ?'
-    # note that ORDER BY should be by date
     query_args = (tag,)
 
     resp = query_db(query, query_args)
@@ -127,13 +131,14 @@ def retrive_urls(tag):
     if len(resp) > 0:
         result.status_code = 200
         result.content_type = "application/json"
-    else:
-        return "404"
 
-    return result
+        return result
+    else:
+        return not_found()
+
 
 #use postman or curl
-@app.route('/tags/new', methods=['POST'])
+@app.route('/tags', methods=['POST'])
 def add_tag():
      if request.is_json:
         content = request.get_json()
@@ -195,10 +200,13 @@ def add_existing_tag(url, tag):
     return resp
 
 
-@app.route('/tags/delete/<url>', methods=['DELETE'])
-def tag_delete(url):
-    query = "DELETE FROM tags WHERE url = ?"
-    query_args = (url,)
+@app.route('/tags/<tag>/<article_url>', methods=['DELETE'])
+def tag_delete(tag, article_url):
+
+    new_url = article_url.replace('=', '/')
+
+    query = "DELETE FROM tags WHERE url = ? AND tag = ?"
+    query_args = (new_url, tag)
 
     result = query_db(query, query_args)
     if type(result) == flask.Response:
