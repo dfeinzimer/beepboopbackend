@@ -2,6 +2,12 @@ import datetime
 from rfeed import *
 import requests
 import json
+import flask
+from flask import g
+from flask import Response
+from flask import request, jsonify
+from flask_basicauth import BasicAuth
+import os
 
 
 def getSummaryFeed():
@@ -27,7 +33,9 @@ def getCommentFeed():
     r.json()
     #print(r.json())
     return r.json()
-
+    
+ 
+@app.route('/rss', methods = ['GET')
 def RSSFeed():
     arc = getSummaryFeed()
     #arcText = getArcicleText()
