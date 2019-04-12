@@ -14,7 +14,7 @@ Create the databases: `cd db/cmd/ && python3 create_all.py`
 
 Fill the databases: `python3 fill_all.py`
 
-Start the services: `cd ../.. && foreman start`
+Start the services: `cd ../.. && foreman start -m "all=3"`
 
 Run the tests: `py.test`
 
