@@ -8,43 +8,38 @@ from flask import request, jsonify
 from flask_basicauth import BasicAuth
 import os
 
-# gets meta data for the 10 most recent articles
+# Get metadata from the 10 most recent articles
 def getSummaryFeed():
     r = requests.get('http://localhost:5000/articles/recent/meta/10')
-    r.json()
     return r.json()
 
-# gets the full text in an article for 10 articles
+# Get full text from the 10 most recent articles
 def getArcicleText():
     for n in 10:
         r = requests.get('http://localhost/articles/recent/{}'.format(n))
-        r.json()
         return r.json()
 
-# gets tags for a arctile
-# todo: Need to figure out how to get a tag from a giving url without knowing the url
+# Gets tags for an arctile
+# TODO: Need to figure out how to get a tag from a given url without knowing the url
 def getTags():
     Article_url = getSummaryFeed()
     for n in Article_url:
         article_url = Article_url['location']
 
     r = requests.get('http://localhost/tags/from/{}'.format(article_url)
-    r.json()
     return r.json()
 
-# gets the comments in an article
+# Get comments in any given article
 def getCommentFeed():
     for n in 1:
         for x in 1:
             r = requests.get("http://localhost/comments/{}/articles={}".format(n,x))
-            r.json()
             return r.json()
 
-# get the comment count for a article
+# Get the comment count for an article
 def getCommentCount():
     for n in 1:
         r = requests.get("http://localhost/comments/count/arcticles={}".format(n))
-        r.json()
         return r.json()
 
 # flask route to get rss summary
@@ -94,7 +89,7 @@ def rssComments():
 
     return feed.rss()
 
-# flask route to get full rss
+# Flask route to get full rss
 @app.route('rss/full/')
 def rssFull():
     commCount = getCommentCount()
