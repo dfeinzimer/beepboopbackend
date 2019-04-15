@@ -27,34 +27,6 @@ Clean the databases: `cd db/cmd/ && python3 destroy_all.py`
 
 
 
-## Things to install:
-
-- `pip3 install tavern`
-
-- `pip3 install foreman`
-
-- `sudo apt install python-pytest`
-
-- `sudo apt install ruby-foreman`
-
-- `sudo apt install --yes nginx-extras`
-
-- `sudo pip3 install Flask-BasicAuth`
-
-
-
-## Possible Problem Solutions:
-
-- `foreman check`
-
-- `pip3 freeze > requirements.txt`
-
-- `pip3 install -r requirements.txt`
-
-- `sudo service nginx restart`
-
-
-
 ## Resources
 
 HTTP Status Codes
