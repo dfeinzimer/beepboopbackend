@@ -200,13 +200,13 @@ def add_existing_tag(url, tag):
     return resp
 
 
-@app.route('/tags/<tag>/<article_url>', methods=['DELETE'])
-def tag_delete(tag, article_url):
+@app.route('/tags', methods=['DELETE'])
+def tag_delete():
 
-    new_url = article_url.replace('=', '/')
+    content = request.get_json()
 
     query = "DELETE FROM tags WHERE url = ? AND tag = ?"
-    query_args = (new_url, tag)
+    query_args = (content["url"], content["tag"])
 
     result = query_db(query, query_args)
     if type(result) == flask.Response:
