@@ -43,18 +43,6 @@ Clean the databases: `cd db/cmd/ && python3 destroy_all.py`
 
 
 
-## Possible Problem Solutions:
-
-- `foreman check`
-
-- `pip3 freeze > requirements.txt`
-
-- `pip3 install -r requirements.txt`
-
-- `sudo service nginx restart`
-
-
-
 ## Resources
 
 HTTP Status Codes
