@@ -21,7 +21,7 @@ Nginx configuration:  Replace code in `/etc/nginx/sites-enabled/default` with co
 
 Start nginx: `sudo service nginx restart`
 
-Run the tests: `py.test`
+RSS: Check the api docs for the RSS feeder for what URLs to hit.
 
 Clean the databases: `cd db/cmd/ && python3 destroy_all.py`
 
