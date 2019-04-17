@@ -207,7 +207,7 @@ def get_recent_articles_metadata(num_of_articles):
 
     for d in result:
         article_id = d["article_id"]
-        d["location"] = f"/articles/{article_id}"
+        d["location"] = f"articles/{article_id}"
 
     resp = jsonify(result)
     resp.status_code = 200

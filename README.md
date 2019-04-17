@@ -1,6 +1,6 @@
-# beepboopbackend
+﻿# beepboopbackend
 
-| Member           | Role  | 
+| Member           | Role  |
 |------------------|-------|
 | Acevedo, Daniel  | DEV 1 |
 | Feinzimer, David | DEV 2 |
@@ -16,7 +16,7 @@ Fill the databases: `python3 fill_all.py`
 
 Start the services: `cd ../.. && foreman start --formation all=3`
 
-Nginx configuration:  Replace code in `/etc/nginx/sites-enabled/default` with code in the `nginx-setup/sites-enabled-default` file. 
+Nginx configuration:  Replace code in `/etc/nginx/sites-enabled/default` with code in the `nginx-setup/sites-enabled-default` file
                       Once foreman has started, compare the ports for each service with the ports in the upstream portion of the nginx config file.  Alter if necessary.
 
 Start nginx: `sudo service nginx restart`
@@ -24,6 +24,34 @@ Start nginx: `sudo service nginx restart`
 Run the tests: `py.test`
 
 Clean the databases: `cd db/cmd/ && python3 destroy_all.py`
+
+
+
+## Things to install:
+
+- `pip3 install tavern`
+
+- `pip3 install foreman`
+
+- `sudo apt install python-pytest`
+
+- `sudo apt install ruby-foreman`
+
+- `sudo apt install --yes nginx-extras`
+
+- `sudo pip3 install Flask-BasicAuth`
+
+
+
+## Possible Problem Solutions:
+
+- `foreman check`
+
+- `pip3 freeze > requirements.txt`
+
+- `pip3 install -r requirements.txt`
+
+- `sudo service nginx restart`
 
 
 

@@ -23,10 +23,10 @@ DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'tags.db')
 
 @app.errorhandler(404)
 def not_found(error=None):
-    message = {
+    message = [{
             'status': 404,
-            'message': 'Not Found: ' + request.url,
-    }
+            'message': 'Not Found: ' + request.url
+    }]
     resp = jsonify(message)
     resp.status_code = 404
     resp.content_type = "application/json"
@@ -210,7 +210,7 @@ def tag_delete():
 
     result = query_db(query, query_args)
     if type(result) == flask.Response:
-        return result
+        return jsonify(result)
     else:
         resp = jsonify(result)
         resp.status_code = 200

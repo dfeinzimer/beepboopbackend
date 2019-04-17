@@ -140,7 +140,7 @@ def get_nth_comments(n, article_url):
         result.status_code = 200
         result.content_type = "application/json"
     else:
-        return "404"
+        return jsonify([{"comment": ""}])
 
     return result
 
