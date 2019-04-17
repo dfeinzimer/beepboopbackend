@@ -9,8 +9,8 @@ import sqlite3
 conn = sqlite3.connect('../db/articles.db')
 if(conn != None):
   print("Opened articles.db successfully");
-  conn.execute("INSERT INTO articles VALUES(null,'The best article ever','This is the best article ever written','A great article!','David Feinzimer','4/7/19', 'dfeinzimer', '4/7/19')")
-  conn.execute("INSERT INTO articles VALUES(null,'My great article'     ,'There once was a lightbulb'           ,'Yup, it is true' ,'David Feinzimer','4/2/19', 'dfeinzimer', '4/6/19')")
+  conn.execute("INSERT INTO articles VALUES(null,'The best article ever','This is the best article ever written','A great article!','David Feinzimer','4/7/2019', 'dfeinzimer', '4/7/2019')")
+  conn.execute("INSERT INTO articles VALUES(null,'My great article'     ,'There once was a lightbulb'           ,'Yup, it is true' ,'David Feinzimer','4/2/2019', 'dfeinzimer', '4/6/2019')")
   conn.commit()
   conn.close()
   print("articles table filled successfully",'\n');
@@ -22,7 +22,7 @@ else:
 conn = sqlite3.connect('../db/comments.db')
 if(conn != None):
   print("Opened comments.db successfully");
-  conn.execute("INSERT INTO comments VALUES(null,'dfeinzimer','What a great article', 'articles/1', '4/7/19')")
+  conn.execute("INSERT INTO comments VALUES(null,'dfeinzimer','What a great article', 'articles/1', '4/7/2019')")
   conn.commit()
   conn.close()
   print("comments table filled successfully",'\n');

@@ -15,7 +15,7 @@ app.config["DEBUG"] = True
 @app.route('/rss/summary', methods=['GET'])
 def feed_summary():
     # Pull the data
-    request = requests.get('http://localhost/articles/recent/10', auth=('dfeinzimer@gmail.com','password1'))
+    request = requests.get('http://localhost/articles/recent/10', auth=('test@email.com','test@email.com'))
 
     # Parse the data
     loaded = json.loads(request.text)
@@ -29,9 +29,7 @@ def feed_summary():
             title = x['title'],
             link = "http://localhost/articles/"+str(x['article_id']),
             author = x['author'],
-            pubDate = datetime.datetime.now()
-            # TODO fix the pubDate parmater. Below should work but it does not.
-            #pubDate = datetime.datetime.strptime(x['article_date'], "%m/%d/%Y").strftime("%a, %d %b %Y %H:%M:%S %Z")
+            pubDate = datetime.datetime.strptime(x['article_date'], "%m/%d/%Y")
         )
 
         # Add the new item to the items list
@@ -55,7 +53,7 @@ def feed_full():
     # Make an empty list to hold rfeed items
     feed_items = []
 
-    article_request = requests.get('http://localhost/articles', auth=('dfeinzimer@gmail.com','password1'))
+    article_request = requests.get('http://localhost/articles', auth=('test@email.com','test@email.com'))
     article_loaded = json.loads(article_request.text)
 
     for x in article_loaded:
@@ -63,7 +61,7 @@ def feed_full():
         print("\t"+x['content'])
         content = x['content']
 
-        tag_request = requests.get('http://localhost/tags/url/articles='+str(x['article_id']), auth=('dfeinzimer@gmail.com','password1'))
+        tag_request = requests.get('http://localhost/tags/url/articles='+str(x['article_id']), auth=('test@email.com','test@email.com'))
         tag_loaded = json.loads(tag_request.text)
 
         categories = []
@@ -72,7 +70,7 @@ def feed_full():
                 print("\t\t#"+y['tag'])
                 categories.append(y['tag'])
 
-        comment_request = requests.get('http://localhost/comments/count/articles='+str(x['article_id']), auth=('dfeinzimer@gmail.com','password1'))
+        comment_request = requests.get('http://localhost/comments/count/articles='+str(x['article_id']), auth=('test@email.com','test@email.com'))
         comment_loaded = json.loads(comment_request.text)
         for z in comment_loaded:
             print("\t\t\tComment Count:",z['count'])
@@ -106,7 +104,7 @@ def feed_comments(article_ID):
     # Make an empty list to hold rfeed items
     feed_items = []
 
-    article_request = requests.get('http://localhost/comments/count/articles='+str(article_ID), auth=('dfeinzimer@gmail.com','password1'))
+    article_request = requests.get('http://localhost/comments/count/articles='+str(article_ID), auth=('test@email.com','test@email.com'))
     article_loaded = json.loads(article_request.text)
 
     comment_count = None
@@ -117,7 +115,7 @@ def feed_comments(article_ID):
     print("comment_count",comment_count)
 
 
-    comment_request = requests.get('http://localhost/comments/'+str(comment_count)+'/articles='+str(article_ID), auth=('dfeinzimer@gmail.com','password1'))
+    comment_request = requests.get('http://localhost/comments/'+str(comment_count)+'/articles='+str(article_ID), auth=('test@email.com','test@email.com'))
     comment_loaded = json.loads(comment_request.text)
 
     for x in comment_loaded:
@@ -138,5 +136,4 @@ def feed_comments(article_ID):
     return(feed.rss())
 
 if __name__ == '__main__':
-    basic_auth.init_app(app)
     app.run()
