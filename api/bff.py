@@ -49,22 +49,15 @@ def feed_summary():
 
     return (feed.rss())
 
-
-
-
-
-
-
 # A full feed containing the full text for each article, its tags as RSS categories, and a comment count.
-
-
-
-
+@app.route('/rss/full', methods=['GET'])
+def feed_full():
+    pass
 
 # A comment feed for each article.
-
-
-
+@app.route('/rss/comments', methods=['GET'])
+def feed_comments():
+    pass
 
 if __name__ == '__main__':
     basic_auth.init_app(app)
