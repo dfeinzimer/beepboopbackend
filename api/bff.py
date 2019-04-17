@@ -55,7 +55,7 @@ def feed_full():
     # Make an empty list to hold rfeed items
     feed_items = []
 
-    article_request = requests.get('http://localhost/articles/recent/10', auth=('dfeinzimer@gmail.com','password1'))
+    article_request = requests.get('http://localhost/articles', auth=('dfeinzimer@gmail.com','password1'))
     article_loaded = json.loads(article_request.text)
 
     for x in article_loaded:
@@ -101,9 +101,41 @@ def feed_full():
     return (feed.rss())
 
 # A comment feed for each article.
-@app.route('/rss/comments', methods=['GET'])
-def feed_comments():
-    pass
+@app.route('/rss/comments/<article_ID>', methods=['GET'])
+def feed_comments(article_ID):
+    # Make an empty list to hold rfeed items
+    feed_items = []
+
+    article_request = requests.get('http://localhost/comments/count/articles='+str(article_ID), auth=('dfeinzimer@gmail.com','password1'))
+    article_loaded = json.loads(article_request.text)
+
+    comment_count = None
+
+    for x in article_loaded:
+        comment_count = x['count']
+
+    print("comment_count",comment_count)
+
+
+    comment_request = requests.get('http://localhost/comments/'+str(comment_count)+'/articles='+str(article_ID), auth=('dfeinzimer@gmail.com','password1'))
+    comment_loaded = json.loads(comment_request.text)
+
+    for x in comment_loaded:
+        item = Item(
+            description = x['comment'],
+        )
+        feed_items.append(item)
+
+    feed = Feed(
+        title = "Comment Feed",
+        link = "http://localhost/rss/comments/<num>",
+        description = "A comment feed for each article.",
+        language = "en-US",
+        lastBuildDate = datetime.datetime.now(),
+        items = feed_items
+    )
+
+    return(feed.rss())
 
 if __name__ == '__main__':
     basic_auth.init_app(app)
