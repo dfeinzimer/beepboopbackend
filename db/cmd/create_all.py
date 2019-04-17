@@ -18,6 +18,7 @@ conn.execute('CREATE TABLE IF NOT EXISTS `articles`\
    `user_display_name`    TEXT NOT NULL,\
    `last_modified`        TEXT NOT NULL);'
 )
+conn.execute('CREATE INDEX title_idx ON articles(title);')
 conn.close()
 print("articles table created successfully",'\n');
 
@@ -32,6 +33,7 @@ conn.execute('CREATE TABLE IF NOT EXISTS `comments`\
    `article_url` TEXT NOT NULL,\
    `comment_date` TEXT NOT NULL);'
 )
+conn.execute('CREATE INDEX commentURL_idx ON comments(article_url);')
 conn.close()
 print("comments table created successfully",'\n');
 
@@ -43,6 +45,8 @@ conn.execute('CREATE TABLE IF NOT EXISTS tags\
   (`tag_id` INTEGER PRIMARY KEY AUTOINCREMENT,\
    `tag`    TEXT NOT NULL,\
    `url`    TEXT);')
+conn.execute('CREATE INDEX tag_idx ON tags(tag);')
+conn.execute('CREATE INDEX url_idx ON tags(url);')
 conn.close()
 print("tags table created successfully",'\n');
 
@@ -56,5 +60,6 @@ conn.execute('CREATE TABLE `users`\
       `pass_hash`     TEXT NOT NULL,\
       `display_name`  TEXT NOT NULL UNIQUE,\
     PRIMARY KEY(`user_id`));')
+conn.execute('CREATE INDEX email_idx ON users(email);')
 conn.close()
 print("users table created successfully",'\n');
