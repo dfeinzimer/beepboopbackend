@@ -1,10 +1,10 @@
 ﻿# beepboopbackend
 
-| Member           | Role  |
-|------------------|-------|
-| Acevedo, Daniel  | DEV 1 |
-| Feinzimer, David | DEV 2 |
-| Roushdy, Yousef  | OPS   |
+| Member           |
+|------------------|
+| Acevedo, Daniel  |
+| Feinzimer, David |
+| Roushdy, Yousef  |
 
 
 
