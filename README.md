@@ -41,6 +41,8 @@ Clean the databases: `cd db/cmd/ && python3 destroy_all.py`
 
 - `sudo pip3 install Flask-BasicAuth`
 
+- `pip install flask-cassandra`
+
 
 
 ## Resources
