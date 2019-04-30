@@ -10,6 +10,8 @@
 
 ## Usage:
 
+Start Sylla: `docker start scylla`
+
 Create the databases: `cd db/cmd/ && python3 create_all.py`
 
 Fill the databases: `python3 fill_all.py`
