@@ -7,25 +7,26 @@ session = cluster.connect()
 session.set_keyspace('beepboopbackend')
 
 
-'''
-conn = sqlite3.connect('../db/articles.db')
-print("Opened articles.db successfully");
-conn.execute('CREATE TABLE IF NOT EXISTS `articles`\
-  (`article_id`           INTEGER PRIMARY KEY AUTOINCREMENT,\
-   `title`                TEXT NOT NULL,\
-   `content`              TEXT NOT NULL,\
-   `headline`             TEXT,\
-   `author`               TEXT NOT NULL,\
-   `article_date`         TEXT NOT NULL,\
-   `user_display_name`    TEXT NOT NULL,\
-   `last_modified`        TEXT NOT NULL);'
+
+'''#############################################################################
+Create an articles table
+#############################################################################'''
+session.execute(
+    """CREATE TABLE IF NOT EXISTS articles(
+        article_id int PRIMARY KEY,
+        title text,
+        content text,
+        headline text,
+        author text,
+        article_date text,
+        user_display_name text,
+        last_modified text
+    )"""
 )
-conn.execute('CREATE INDEX title_idx ON articles(title);')
-conn.close()
-print("articles table created successfully",'\n');
 
 
 
+'''
 conn = sqlite3.connect('../db/comments.db')
 print("Opened comments.db successfully");
 conn.execute('CREATE TABLE IF NOT EXISTS `comments`\
