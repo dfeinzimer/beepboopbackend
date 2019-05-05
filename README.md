@@ -30,6 +30,8 @@ Nginx configuration:  Replace code in `/etc/nginx/sites-enabled/default` with co
 
 Create the databases: `cd db/cmd/ && python3 create_all.py`
 
+Create the `beepboopbackend` keyspace for Cassandra. First run: `docker exec -it scylla cqlsh` followed by: `Create keyspace beepboopbackend with replication={'class':'SimpleStrategy','replication_factor': 3};`
+
 
 
 ## Things to install:
