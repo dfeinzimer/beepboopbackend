@@ -46,7 +46,7 @@ Create the databases: `cd db/cmd/ && python3 create_all.py`
 
 - `sudo pip3 install Flask-BasicAuth`
 
-- `pip install flask-cassandra`
+- `pip3 install flask-cassandra`
 
 
 

@@ -10,6 +10,7 @@ from flask import g
 from flask import Response
 from flask import request, jsonify
 from flask_basicauth import BasicAuth
+#from flask_cassandra import CassandraCluster
 import click
 #from flask.cli import FlaskCLI
 from flask.cli import AppGroup
@@ -22,6 +23,8 @@ DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'comments.db')
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
+#cassandra = CassandraCluster()
+#app.config['CASSANDRA_NODES'] = ['cassandra-c1.terbiumlabs.com']  # can be a string or list of nodes
 
 
 @app.errorhandler(404)
@@ -195,7 +198,7 @@ def comment_delete(comment_ID):
 
     result = query_db(query, query_args)
     if type(result) == flask.Response:
-        return result 
+        return result
     else:
         resp = jsonify(result)
         resp.status_code = 200

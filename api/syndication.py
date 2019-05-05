@@ -3,9 +3,11 @@ from flask import Flask, g, jsonify, Response, request
 import requests
 import datetime
 
-
 app = Flask(__name__)
 app.config["DEBUG"] = True
+
+#cassandra = CassandraCluster()
+#app.config['CASSANDRA_NODES'] = ['cassandra-c1.terbiumlabs.com']  # can be a string or list of nodes
 
 basic_auth_creds = ('test@email.com', 'test@email.com')
 
@@ -30,11 +32,11 @@ def summary():
     for obj in response:
         summ.append(Item(
             title = obj["title"],
-            link = f"http://localhost/{obj['location']}", 
+            link = f"http://localhost/{obj['location']}",
             author = obj["author"],
             pubDate = datetime.datetime.strptime(obj["article_date"], "%m/%d/%Y")
         ))
-    
+
     feed = Feed(
     title = "Sample RSS Feed",
     link = "http://localhost/syndication/summary",
@@ -87,16 +89,16 @@ def full():
 
         rss.append(Item(
             title = article["title"],
-            link = f"http://localhost/articles/{article['article_id']}", 
+            link = f"http://localhost/articles/{article['article_id']}",
             author = article["author"],
             pubDate = datetime.datetime.strptime(article["article_date"], "%m/%d/%Y"),
             categories = category_obj,
             comments = comment_num[0],
             description = article["content"]
         ))
-        
+
         idx += 1
-    
+
     feed = Feed(
     title = "Full text article feed",
     link = "http://localhost/syndication/full",
@@ -130,11 +132,11 @@ def comments():
 
         if "article_url" in comment[0]:
             rss.append(Item(
-                link = f"http://localhost/comments/{comment[0]['article_url']}", 
+                link = f"http://localhost/comments/{comment[0]['article_url']}",
                 comments = f"http://localhost/comments/{comment[0]['article_url']}",
                 description = str(com_obj).strip('[]')
             ))
-    
+
     feed = Feed(
     title = "Full text article feed",
     link = "http://localhost/syndication/full",
@@ -145,7 +147,7 @@ def comments():
     )
 
     return feed.rss()
-    
+
 
 
 if __name__ == '__main__':

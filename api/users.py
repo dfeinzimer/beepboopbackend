@@ -3,6 +3,7 @@
 
 from flask import Flask, g, jsonify, Response, request
 from flask_basicauth import BasicAuth
+#from flask_cassandra import CassandraCluster
 #from .db import master as DATABASE
 import base64
 import datetime
@@ -13,6 +14,8 @@ import os
 PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
 DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'users.db')
 
+#cassandra = CassandraCluster()
+#app.config['CASSANDRA_NODES'] = ['cassandra-c1.terbiumlabs.com']  # can be a string or list of nodes
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -168,8 +171,8 @@ def change_password():
 
         if user_exists(data["email"], data["password"]):
             query = "UPDATE users SET pass_hash = ? WHERE email = ? AND pass_hash = ?"
-            query_args = (hashlib.md5(data["new_password"].encode()).hexdigest(), 
-                          data["email"], 
+            query_args = (hashlib.md5(data["new_password"].encode()).hexdigest(),
+                          data["email"],
                           hashlib.md5(data["password"].encode()).hexdigest())
             err, result = query_db(query, query_args)
             return jsonify(result)

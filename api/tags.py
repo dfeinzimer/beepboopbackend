@@ -9,6 +9,7 @@ from flask import g
 from flask import Response
 from flask import request, jsonify
 from flask_basicauth import BasicAuth
+#from flask_cassandra import CassandraCluster
 import click
 import os
 #from flask.cli import AppGroup #this works
@@ -16,6 +17,8 @@ import os
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
+#cassandra = CassandraCluster()
+#app.config['CASSANDRA_NODES'] = ['cassandra-c1.terbiumlabs.com']  # can be a string or list of nodes
 
 PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
 DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'tags.db')

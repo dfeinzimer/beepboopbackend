@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-
 import datetime
 import hashlib
 import sqlite3
@@ -9,6 +8,7 @@ from flask import g
 from flask import Response
 from flask import request, jsonify
 from flask_basicauth import BasicAuth
+#from flask_cassandra import CassandraCluster
 import os
 
 PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
@@ -16,7 +16,8 @@ DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'articles.db')
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
-
+#cassandra = CassandraCluster()
+#app.config['CASSANDRA_NODES'] = ['cassandra-c1.terbiumlabs.com']
 
 #gets a connection to our DB
 def get_db():
@@ -24,7 +25,7 @@ def get_db():
     if db is None:
         db = g._database = sqlite3.connect(DATABASE)
         #db.execute('pragma foreign_keys=ON')
-    
+
     def make_dicts(cursor, row):
         return dict((cursor.description[idx][0], value)
                     for idx, value in enumerate(row))
@@ -53,7 +54,7 @@ def query_db(query, args=(), one=False):
             with cur:
                 cursor.execute(query, args)
                 rv = cursor.fetchall()
-                
+
                 #gets the rowID of the last inserted row so we can get the url to the post
                 article_id["article_id"] = str(cursor.lastrowid)
 
@@ -65,7 +66,7 @@ def query_db(query, args=(), one=False):
             return not_found()
         elif int(article_id["article_id"]) != 0:
             return article_id
-        else:                
+        else:
             return (rv[0] if rv else None) if one else rv
     except Exception as err:
         err_list_dict = [{"error": str(err),
@@ -81,7 +82,7 @@ def not_found(error=None):
             'status': 404,
             'message': 'Not Found: ' + request.url,
     }
-    
+
     resp = jsonify(message)
     resp.status_code = 404
     resp.content_type = "applciation/json"
@@ -120,7 +121,7 @@ def new_article():
 #Get an individual article by ID
 @app.route('/articles/<article_ID>', methods=['GET'])
 def get_article(article_ID):
-    
+
     query = "SELECT * FROM articles WHERE article_id = ?"
     query_args = (article_ID,)
 
@@ -132,7 +133,7 @@ def get_article(article_ID):
         result.content_type = "application/json"
     else:
         return not_found()
-    
+
     return result
 
 
@@ -141,7 +142,7 @@ def get_article(article_ID):
 def edit_article(article_ID):
 
     if request.is_json:
-        
+
         query = "UPDATE articles SET "
         query_args = []
         content = request.get_json()
@@ -154,7 +155,7 @@ def edit_article(article_ID):
         query_args.append(str(datetime.date.today()))
         query_args.append(article_ID)
 
-        result = query_db(query, query_args)  
+        result = query_db(query, query_args)
 
         if type(result) == flask.Response:
             return result
@@ -163,7 +164,7 @@ def edit_article(article_ID):
             resp.status_code = 200
             resp.content_type = "application/json"
             return resp
-    
+
     else:
         return "Expected JSON"
 
