@@ -3,7 +3,6 @@
 
 from flask import Flask, g, jsonify, Response, request
 from flask_basicauth import BasicAuth
-#from flask_cassandra import CassandraCluster
 #from .db import master as DATABASE
 import base64
 import datetime
@@ -14,8 +13,7 @@ import os
 PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
 DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'users.db')
 
-#cassandra = CassandraCluster()
-#app.config['CASSANDRA_NODES'] = ['cassandra-c1.terbiumlabs.com']  # can be a string or list of nodes
+
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -23,6 +21,10 @@ app.config["DEBUG"] = True
 #basic_auth = auth.GetAuth()
 #basic_auth = auth.GetAuth()
 #basic_auth.init_app(app)
+
+from flask_cassandra import CassandraCluster
+cassandra = CassandraCluster()
+app.config['CASSANDRA_NODES'] = ['172.17.0.2']
 
 #DATABASE = '../db/db/users.db'
 

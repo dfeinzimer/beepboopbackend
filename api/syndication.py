@@ -6,8 +6,9 @@ import datetime
 app = Flask(__name__)
 app.config["DEBUG"] = True
 
-#cassandra = CassandraCluster()
-#app.config['CASSANDRA_NODES'] = ['cassandra-c1.terbiumlabs.com']  # can be a string or list of nodes
+from flask_cassandra import CassandraCluster
+cassandra = CassandraCluster()
+app.config['CASSANDRA_NODES'] = ['172.17.0.2']
 
 basic_auth_creds = ('test@email.com', 'test@email.com')
 

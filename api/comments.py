@@ -10,7 +10,6 @@ from flask import g
 from flask import Response
 from flask import request, jsonify
 from flask_basicauth import BasicAuth
-#from flask_cassandra import CassandraCluster
 import click
 #from flask.cli import FlaskCLI
 from flask.cli import AppGroup
@@ -23,9 +22,10 @@ DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'comments.db')
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
-#cassandra = CassandraCluster()
-#app.config['CASSANDRA_NODES'] = ['cassandra-c1.terbiumlabs.com']  # can be a string or list of nodes
 
+from flask_cassandra import CassandraCluster
+cassandra = CassandraCluster()
+app.config['CASSANDRA_NODES'] = ['172.17.0.2']
 
 @app.errorhandler(404)
 def not_found(error=None):
