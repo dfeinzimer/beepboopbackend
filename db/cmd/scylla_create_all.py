@@ -1,11 +1,13 @@
-# https://www.tutorialspoint.com/flask/flask_sqlite.htm
+'''#############################################################################
+Setup Cassandra, connect to a cluster and keyspace.
+#############################################################################'''
+from cassandra.cluster import Cluster
+cluster = Cluster(['172.17.0.2'])
+session = cluster.connect()
+session.set_keyspace('beepboopbackend')
 
 
-
-import sqlite3
-
-
-
+'''
 conn = sqlite3.connect('../db/articles.db')
 print("Opened articles.db successfully");
 conn.execute('CREATE TABLE IF NOT EXISTS `articles`\
@@ -63,3 +65,4 @@ conn.execute('CREATE TABLE `users`\
 conn.execute('CREATE INDEX email_idx ON users(email);')
 conn.close()
 print("users table created successfully",'\n');
+'''
