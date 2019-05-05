@@ -12,7 +12,7 @@
 
 Start nginx: `sudo service nginx restart`
 
-Start Sylla: `docker start scylla`
+Start Scylla: `docker start scylla`
 
 Fill the databases: `python3 fill_all.py`
 
