@@ -34,19 +34,7 @@ Create the databases: `cd db/cmd/ && python3 create_all.py`
 
 ## Things to install:
 
-- `pip3 install tavern`
-
-- `pip3 install foreman`
-
-- `sudo apt install python-pytest`
-
-- `sudo apt install ruby-foreman`
-
-- `sudo apt install --yes nginx-extras`
-
-- `sudo pip3 install Flask-BasicAuth`
-
-- `pip3 install flask-cassandra`
+[Things To Be Installed Wiki Page](https://github.com/kernelpop/beepboopbackend/wiki/Things-To-Be-Installed)
 
 
 
