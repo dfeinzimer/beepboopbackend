@@ -34,7 +34,7 @@ Create the `beepboopbackend` keyspace for Cassandra. First run: `docker exec -it
 
 
 
-## Things to install:
+## Things To Be Installed:
 
 [Things To Be Installed Wiki Page](https://github.com/kernelpop/beepboopbackend/wiki/Things-To-Be-Installed)
 
