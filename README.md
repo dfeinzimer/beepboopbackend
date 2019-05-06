@@ -20,6 +20,8 @@ Start the services: `cd ../.. && foreman start --formation all=3`
 
 RSS: Check the api docs for the RSS feeder for what URLs to hit.
 
+Check database contents: `select * from users; select * from tags; select * from comments; select * from articles;`
+
 Clean the databases: `cd db/cmd/ && python3 destroy_all.py`
 
 
