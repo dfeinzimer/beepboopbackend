@@ -35,19 +35,25 @@ session.execute(
 
 
 
-
 '''#############################################################################
 Fill the comments table
 #############################################################################'''
-conn = sqlite3.connect('../db/comments.db')
-if(conn != None):
-  print("Opened comments.db successfully");
-  conn.execute("INSERT INTO comments VALUES(null,'dfeinzimer','What a great article', 'articles/1', '4/7/2019')")
-  conn.commit()
-  conn.close()
-  print("comments table filled successfully",'\n');
-else:
-  print("Cannot open comments.db")
+session.execute(
+    """INSERT INTO comments (
+        comment_id,
+        article_url,
+        comment,
+        comment_date,
+        user_display_name
+    ) VALUES (
+        uuid(),
+        'articles/1',
+        'What a great article',
+        '5/6/2019',
+        'dfeinzimer'
+    )"""
+)
+"""
 
 
 
