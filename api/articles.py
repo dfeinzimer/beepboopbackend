@@ -106,12 +106,14 @@ def not_found(error=None):
 #Get all articles
 @app.route('/articles', methods=['GET'])
 def all_articles():
-    query = "SELECT * FROM articles"
-    resp = query_db(query)
-    result = jsonify(resp)
-
-    return result
-
+#    query = "SELECT * FROM articles"
+#    resp = query_db(query)
+#    result = jsonify(resp)
+#    return result
+    print("Get articles")
+    session.execute(
+        """SELECT * FROM articles"""
+    )
 
 #Post a new article
 @app.route('/articles', methods=['POST'])

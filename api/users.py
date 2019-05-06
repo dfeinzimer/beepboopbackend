@@ -17,10 +17,16 @@ DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'users.db')
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
+
+
+
 #DATABASE.init_app(app)
 #basic_auth = auth.GetAuth()
 #basic_auth = auth.GetAuth()
 #basic_auth.init_app(app)
+#DATABASE = '../db/db/users.db'
+
+
 
 '''#############################################################################
 Setup Cassandra, connect to a cluster and keyspace.
@@ -36,7 +42,6 @@ from flask_cassandra import CassandraCluster
 cassandra = CassandraCluster()
 app.config['CASSANDRA_NODES'] = ['172.17.0.2']
 
-#DATABASE = '../db/db/users.db'
 
 
 class auth(BasicAuth):
