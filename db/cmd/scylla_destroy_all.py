@@ -8,36 +8,40 @@ session.set_keyspace('beepboopbackend')
 
 
 
-connection  = sqlite3.connect("../db/articles.db")
-cursor = connection.cursor()
-dropTableStatement = "DROP TABLE articles"
-cursor.execute(dropTableStatement)
-connection.close()
+'''#############################################################################
+Drop the articles table
+#############################################################################'''
+session.execute(
+    """DROP TABLE IF EXISTS articles"""
+)
 print("articles table dropped",'\n')
 
 
 
-connection  = sqlite3.connect("../db/comments.db")
-cursor = connection.cursor()
-dropTableStatement = "DROP TABLE comments"
-cursor.execute(dropTableStatement)
-connection.close()
+'''#############################################################################
+Drop the comments table
+#############################################################################'''
+session.execute(
+    """DROP TABLE IF EXISTS comments"""
+)
 print("comments table dropped",'\n')
 
 
 
-connection  = sqlite3.connect("../db/tags.db")
-cursor = connection.cursor()
-dropTableStatement = "DROP TABLE tags"
-cursor.execute(dropTableStatement)
-connection.close()
+'''#############################################################################
+Drop the tags table
+#############################################################################'''
+session.execute(
+    """DROP TABLE IF EXISTS tags"""
+)
 print("tags table dropped",'\n')
 
 
 
-connection  = sqlite3.connect("../db/users.db")
-cursor = connection.cursor()
-dropTableStatement = "DROP TABLE users"
-cursor.execute(dropTableStatement)
-connection.close()
+'''#############################################################################
+Drop the users table
+#############################################################################'''
+session.execute(
+    """DROP TABLE IF EXISTS users"""
+)
 print("users table dropped",'\n')
