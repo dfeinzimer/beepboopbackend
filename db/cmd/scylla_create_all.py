@@ -13,7 +13,7 @@ Create an articles table
 #############################################################################'''
 session.execute(
     """CREATE TABLE IF NOT EXISTS articles(
-        article_id int PRIMARY KEY,
+        article_id uuid PRIMARY KEY,
         title text,
         content text,
         headline text,

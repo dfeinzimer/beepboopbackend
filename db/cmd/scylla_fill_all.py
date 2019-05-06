@@ -8,6 +8,31 @@ session.set_keyspace('beepboopbackend')
 
 
 
+'''#############################################################################
+Fill the articles table
+#############################################################################'''
+session.execute(
+    """INSERT INTO articles (
+        article_id,
+        title,
+        content,
+        headline,
+        author,
+        article_date,
+        user_display_name,
+        last_modified
+    ) VALUES (
+        uuid(),
+        'The best article title ever',
+        'Great article content 2',
+        'A good headline 2',
+        'David Feinzimer',
+        '5/6/2019',
+        'dfeinzimer',
+        '5/6/2019'
+    )"""
+)
+"""
 conn = sqlite3.connect('../db/articles.db')
 if(conn != None):
   print("Opened articles.db successfully");
@@ -21,6 +46,10 @@ else:
 
 
 
+
+'''#############################################################################
+Fill the comments table
+#############################################################################'''
 conn = sqlite3.connect('../db/comments.db')
 if(conn != None):
   print("Opened comments.db successfully");
@@ -33,6 +62,9 @@ else:
 
 
 
+'''#############################################################################
+Fill the tags table
+#############################################################################'''
 conn = sqlite3.connect('../db/tags.db')
 if(conn != None):
   print("Opened tags.db successfully");
@@ -47,6 +79,9 @@ else:
 
 
 
+'''#############################################################################
+Fill the users table
+#############################################################################'''
 conn = sqlite3.connect('../db/users.db')
 if(conn != None):
   print("Opened users.db successfully");                        #test@email.com
@@ -56,3 +91,4 @@ if(conn != None):
   print("users table filled successfully",'\n');
 else:
   print("Cannot open users.db")
+"""
