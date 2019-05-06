@@ -31,7 +31,7 @@ Create an comments table
 #############################################################################'''
 session.execute(
     """CREATE TABLE IF NOT EXISTS comments(
-        comment_id int PRIMARY KEY,
+        comment_id uuid PRIMARY KEY,
         user_display_name text,
         comment text,
         article_url text,
@@ -46,7 +46,7 @@ Create a tags table
 #############################################################################'''
 session.execute(
     """CREATE TABLE IF NOT EXISTS tags(
-        tag_id int PRIMARY KEY,
+        tag_id uuid PRIMARY KEY,
         tag text,
         url text
     )"""
@@ -59,7 +59,7 @@ Create a users table
 #############################################################################'''
 session.execute(
     """CREATE TABLE IF NOT EXISTS users(
-        user_id int PRIMARY KEY,
+        user_id uuid PRIMARY KEY,
         email text,
         pass_hash text,
         display_name text
