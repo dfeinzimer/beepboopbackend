@@ -30,7 +30,7 @@ session.execute(
         '5/6/2019',
         'dfeinzimer',
         '5/6/2019'
-    )"""
+    );"""
 )
 
 
@@ -51,39 +51,39 @@ session.execute(
         'What a great article',
         '5/6/2019',
         'dfeinzimer'
-    )"""
+    );"""
 )
-"""
 
 
 
 '''#############################################################################
 Fill the tags table
 #############################################################################'''
-conn = sqlite3.connect('../db/tags.db')
-if(conn != None):
-  print("Opened tags.db successfully");
-  conn.execute("INSERT INTO tags VALUES(null,'apples','articles/1')")
-  conn.execute("INSERT INTO tags VALUES(null,'bananas','articles/1')")
-  conn.execute("INSERT INTO tags VALUES(null,'corn','articles/1')")
-  conn.commit()
-  conn.close()
-  print("tags table filled successfully",'\n');
-else:
-  print("Cannot open tags.db")
+session.execute(
+    """INSERT INTO tags (
+        tag_id,
+        tag,
+        url
+    ) VALUES (
+        uuid(),
+        'myTag1',
+        'articles/1'
+    );"""
+)
 
 
 
 '''#############################################################################
 Fill the users table
 #############################################################################'''
-conn = sqlite3.connect('../db/users.db')
-if(conn != None):
-  print("Opened users.db successfully");                        #test@email.com
-  conn.execute("INSERT INTO users VALUES(null,'test@email.com','93942e96f5acd83e2e047ad8fe03114d','dfeinzimer')")
-  conn.commit()
-  conn.close()
-  print("users table filled successfully",'\n');
-else:
-  print("Cannot open users.db")
-"""
+session.execute(
+    """INSERT INTO users (
+        user_id,
+        display_name,
+        email
+    ) VALUES (
+        uuid(),
+        'user3',
+        'user1@gmail.com'
+    );"""
+)
