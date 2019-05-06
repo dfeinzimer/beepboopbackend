@@ -16,6 +16,16 @@ import os
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
+'''#############################################################################
+Setup Cassandra, connect to a cluster and keyspace.
+#############################################################################'''
+from cassandra.cluster import Cluster
+cluster = Cluster(['172.17.0.2'])
+session = cluster.connect()
+session.set_keyspace('beepboopbackend')
+'''#############################################################################
+Older Cassandra implementation possibly no longer necessary
+#############################################################################'''
 from flask_cassandra import CassandraCluster
 cassandra = CassandraCluster()
 app.config['CASSANDRA_NODES'] = ['172.17.0.2']
