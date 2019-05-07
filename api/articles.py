@@ -154,18 +154,8 @@ def new_article():
 #Get an individual article by ID
 @app.route('/articles/<article_ID>', methods=['GET'])
 def get_article(article_ID):
-    #query = "SELECT * FROM articles WHERE article_id = ?"
-    #query_args = (article_ID,)
-    #resp = query_db(query, query_args)
-    #result = jsonify(resp)
-    #if len(resp) > 0:
-    #    result.status_code = 200
-    #    result.content_type = "application/json"
-    #else:
-    #    return not_found()
-    #return result
     objects = []
-    rows = session.execute("SELECT * FROM articles WHERE article_id="+"daa8e01a-7080-11e9-bba6-08002757542a")
+    rows = session.execute("SELECT * FROM articles WHERE article_id="+str(article_ID))
     for row in rows:
         result = {}
         result["article_date"] = row.article_date
