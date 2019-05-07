@@ -28,12 +28,8 @@ from cassandra import ReadTimeout
 cluster = Cluster(['172.17.0.2'])
 session = cluster.connect()
 session.set_keyspace('beepboopbackend')
-'''#############################################################################
-Older Cassandra implementation possibly no longer necessary
-#############################################################################'''
-from flask_cassandra import CassandraCluster
-cassandra = CassandraCluster()
-app.config['CASSANDRA_NODES'] = ['172.17.0.2']
+
+
 
 #gets a connection to our DB
 def get_db():
@@ -230,19 +226,19 @@ def get_recent_articles(num_of_articles):
 #Get n most recent articles meta data
 @app.route('/articles/recent/meta/<num_of_articles>', methods=['GET'])
 def get_recent_articles_metadata(num_of_articles):
-    query = "SELECT article_id, title, author, user_display_name, article_date FROM articles ORDER BY article_date DESC LIMIT ?"
-    query_args = (num_of_articles,)
-
-    result = query_db(query, query_args)
-
-    for d in result:
-        article_id = d["article_id"]
-        d["location"] = f"articles/{article_id}"
-
-    resp = jsonify(result)
-    resp.status_code = 200
-    resp.content_type = "application/json"
-    return resp
+    objects = []
+    rows = session.execute("SELECT * FROM articles LIMIT " + str(num_of_articles))
+    for row in rows:
+        result = {}
+        result["article_date"] = row.article_date
+        #result["article_id"] = row.article_id
+        result["author"] = row.author
+        #result["location"] = "articles/"+str(row.article_id)
+        #result["location"] = row.article_id TODO UUIDs aren't serializable
+        result["title"] = row.title
+        result["user_display_name"] = row.user_display_name
+        objects.append(result)
+    return json.dumps(objects)
 
 
 if __name__ == '__main__':
