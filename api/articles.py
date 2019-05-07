@@ -5,6 +5,7 @@ import hashlib
 import sqlite3
 import flask
 import json
+import uuid
 from flask import g
 from flask import Response
 from flask import request, jsonify
@@ -107,10 +108,6 @@ def not_found(error=None):
 #Get all articles
 @app.route('/articles', methods=['GET'])
 def all_articles():
-#    query = "SELECT * FROM articles"
-#    resp = query_db(query)
-#    result = jsonify(resp)
-#    return result
     objects = []
     rows = session.execute('SELECT * FROM articles')
     for row in rows:
@@ -131,14 +128,24 @@ def all_articles():
 def new_article():
     if request.is_json:
         content = request.get_json()
-
-        query_args = (content["title"], content["content"], content["headline"], content["author"], content["article_date"], str(datetime.date.today()), content['user_display_name'])
-        query = "INSERT INTO articles (title, content, headline, author, article_date, last_modified, user_display_name) VALUES (?, ?, ?, ?, ?, ?, ?)"
-
-        result = query_db(query, query_args)
-        resp = jsonify(result)
-        resp.status_code = 201
-        resp.headers['Location'] = f"/articles/{result['article_id']}"
+        id = uuid.uuid1()
+        session.execute(
+            """
+            INSERT INTO articles (
+                article_id,
+                title, content,
+                headline, author,
+                article_date, last_modified, user_display_name
+            )
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            """,
+            (id,
+            content["title"], content["content"],
+            content["headline"], content["author"],
+            content["article_date"],str(datetime.date.today()),content['user_display_name'])
+        )
+        resp = json.dumps({"article_id":str(id)})
+        #resp.status_code = 201
         return resp
     else:
         return "expected JSON"

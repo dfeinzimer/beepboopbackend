@@ -11,6 +11,8 @@ from flask import request, jsonify
 from flask_basicauth import BasicAuth
 import click
 import os
+import json
+import uuid
 #from flask.cli import AppGroup #this works
 
 app = flask.Flask(__name__)

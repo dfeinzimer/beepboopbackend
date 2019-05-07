@@ -15,6 +15,8 @@ import click
 from flask.cli import AppGroup
 import os
 import string
+import json
+import uuid
 
 
 PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))

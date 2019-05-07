@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import json
+import uuid
 
 '''#############################################################################
 Setup Cassandra, connect to a cluster and keyspace.
@@ -24,17 +25,20 @@ Older Cassandra implementation possibly no longer necessary
 
 
 
-objects = []
-rows = session.execute('SELECT * FROM articles')
-for row in rows:
-    result = {}
-    result["article_date"] = row.article_date
-    result["author"] = row.author
-    result["content"] = row.content
-    result["headline"] = row.headline
-    result["last_modified"] = row.last_modified
-    result["title"] = row.title
-    result["user_display_name"] = row.user_display_name
-    objects.append(result)
-print(objects)
-print(json.dumps(objects))
+id = uuid.uuid1()
+session.execute(
+    """
+    INSERT INTO articles (
+        article_id,
+        title, content,
+        headline, author,
+        article_date, last_modified, user_display_name
+    )
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+    """,
+    (id,"My title", "My content",
+    "My headline", "David Feinzimer",
+    "5/6/2019","5/6/2019","dfeinzimer")
+)
+print("id type",type(id))
+print("id",json.dumps({"article_id":str(id)}))

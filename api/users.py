@@ -9,6 +9,8 @@ import datetime
 import hashlib
 import sqlite3
 import os
+import json
+import uuid
 
 PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
 DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'users.db')
