@@ -4,6 +4,7 @@ import datetime
 import hashlib
 import sqlite3
 import flask
+import json
 from flask import g
 from flask import Response
 from flask import request, jsonify
@@ -110,10 +111,20 @@ def all_articles():
 #    resp = query_db(query)
 #    result = jsonify(resp)
 #    return result
-    print("Get articles")
-    session.execute(
-        """SELECT * FROM articles"""
-    )
+    objects = []
+    rows = session.execute('SELECT * FROM articles')
+    for row in rows:
+        result = {}
+        result["article_date"] = row.article_date
+        result["author"] = row.author
+        result["content"] = row.content
+        result["headline"] = row.headline
+        result["last_modified"] = row.last_modified
+        result["title"] = row.title
+        result["user_display_name"] = row.user_display_name
+        objects.append(result)
+    print(objects)
+    return json.dumps(objects)
 
 #Post a new article
 @app.route('/articles', methods=['POST'])
