@@ -100,20 +100,27 @@ def close_connection(exception):
 
 @app.route('/comments/all', methods=['GET'])
 def comments_all():
+#    query = 'SELECT * FROM comments;'
+#    query_args = ("")
+#    resp = query_db(query, query_args)
+#    result = jsonify(resp)
+#    if len(resp) > 0:
+#        result.status_code = 200
+#        result.content_type = "application/json"
+#    else:
+#        return not_found()
+#    return result
+    objects = []
+    rows = session.execute('SELECT * FROM comments')
+    for row in rows:
+        result = {}
+        result["article_url"] = row.article_url
+        result["comment"] = row.comment
+        result["comment_date"] = row.comment_date
+        result["user_display_name"] = row.user_display_name
+        objects.append(result)
+    return json.dumps(objects)
 
-    query = 'SELECT * FROM comments;'
-    query_args = ("")
-
-    resp = query_db(query, query_args)
-    result = jsonify(resp)
-
-    if len(resp) > 0:
-        result.status_code = 200
-        result.content_type = "application/json"
-    else:
-        return not_found()
-
-    return result
 
 
 @app.route('/comments/count/<url>', methods=['GET'])
