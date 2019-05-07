@@ -212,14 +212,19 @@ def delete_article(article_ID):
 #Get n most recent articles
 @app.route('/articles/recent/<num_of_articles>', methods=['GET'])
 def get_recent_articles(num_of_articles):
-    query = "SELECT * FROM articles ORDER BY article_date DESC LIMIT ?"
-    query_args = (num_of_articles,)
-
-    result = query_db(query, query_args)
-    resp = jsonify(result)
-    resp.status_code = 200
-    resp.content_type = "application/json"
-    return resp
+    objects = []
+    rows = session.execute("SELECT * FROM articles LIMIT " + str(num_of_articles))
+    for row in rows:
+        result = {}
+        result["article_date"] = row.article_date
+        result["author"] = row.author
+        result["content"] = row.content
+        result["headline"] = row.headline
+        result["last_modified"] = row.last_modified
+        result["title"] = row.title
+        result["user_display_name"] = row.user_display_name
+        objects.append(result)
+    return json.dumps(objects)
 
 
 #Get n most recent articles meta data
