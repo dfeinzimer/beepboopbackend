@@ -169,6 +169,7 @@ def get_article(article_ID):
     return json.dumps(objects)
 
 
+
 #edit an individual article
 @app.route('/articles/<article_ID>', methods=['PATCH'])
 def edit_article(article_ID):
@@ -204,17 +205,8 @@ def edit_article(article_ID):
 #delete an individual article
 @app.route('/articles/<article_ID>', methods=['DELETE'])
 def delete_article(article_ID):
-    query = "DELETE FROM articles WHERE article_id = ?"
-    query_args = (article_ID,)
-
-    result = query_db(query, query_args)
-    if type(result) == flask.Response:
-        return result
-    else:
-        resp = jsonify(result)
-        resp.status_code = 200
-        resp.content_type = "application/json"
-        return resp
+    rows = session.execute("DELETE FROM articles WHERE article_id="+str(article_ID))
+    return ""
 
 
 #Get n most recent articles
