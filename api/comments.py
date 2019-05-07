@@ -33,12 +33,7 @@ from cassandra import ReadTimeout
 cluster = Cluster(['172.17.0.2'])
 session = cluster.connect()
 session.set_keyspace('beepboopbackend')
-'''#############################################################################
-Older Cassandra implementation possibly no longer necessary
-#############################################################################'''
-from flask_cassandra import CassandraCluster
-cassandra = CassandraCluster()
-app.config['CASSANDRA_NODES'] = ['172.17.0.2']
+
 
 @app.errorhandler(404)
 def not_found(error=None):

@@ -16,12 +16,7 @@ from cassandra import ReadTimeout
 cluster = Cluster(['172.17.0.2'])
 session = cluster.connect()
 session.set_keyspace('beepboopbackend')
-'''#############################################################################
-Older Cassandra implementation possibly no longer necessary
-#############################################################################'''
-from flask_cassandra import CassandraCluster
-cassandra = CassandraCluster()
-app.config['CASSANDRA_NODES'] = ['172.17.0.2']
+
 
 basic_auth_creds = ('test@email.com', 'test@email.com')
 
