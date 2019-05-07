@@ -24,6 +24,7 @@ app.config["DEBUG"] = True
 Setup Cassandra, connect to a cluster and keyspace.
 #############################################################################'''
 from cassandra.cluster import Cluster
+from cassandra import ReadTimeout
 cluster = Cluster(['172.17.0.2'])
 session = cluster.connect()
 session.set_keyspace('beepboopbackend')
@@ -120,7 +121,6 @@ def all_articles():
         result["title"] = row.title
         result["user_display_name"] = row.user_display_name
         objects.append(result)
-    print(objects)
     return json.dumps(objects)
 
 #Post a new article
@@ -154,20 +154,29 @@ def new_article():
 #Get an individual article by ID
 @app.route('/articles/<article_ID>', methods=['GET'])
 def get_article(article_ID):
-
-    query = "SELECT * FROM articles WHERE article_id = ?"
-    query_args = (article_ID,)
-
-    resp = query_db(query, query_args)
-    result = jsonify(resp)
-
-    if len(resp) > 0:
-        result.status_code = 200
-        result.content_type = "application/json"
-    else:
-        return not_found()
-
-    return result
+    #query = "SELECT * FROM articles WHERE article_id = ?"
+    #query_args = (article_ID,)
+    #resp = query_db(query, query_args)
+    #result = jsonify(resp)
+    #if len(resp) > 0:
+    #    result.status_code = 200
+    #    result.content_type = "application/json"
+    #else:
+    #    return not_found()
+    #return result
+    objects = []
+    rows = session.execute("SELECT * FROM articles WHERE article_id="+"daa8e01a-7080-11e9-bba6-08002757542a")
+    for row in rows:
+        result = {}
+        result["article_date"] = row.article_date
+        result["author"] = row.author
+        result["content"] = row.content
+        result["headline"] = row.headline
+        result["last_modified"] = row.last_modified
+        result["title"] = row.title
+        result["user_display_name"] = row.user_display_name
+        objects.append(result)
+    return json.dumps(objects)
 
 
 #edit an individual article
