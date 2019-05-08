@@ -29,8 +29,9 @@ cluster = Cluster(['172.17.0.2'])
 session = cluster.connect()
 session.set_keyspace('beepboopbackend')
 
-
-#gets a connection to our DB
+'''#############################################################################
+Get a database connection.
+#############################################################################'''
 def get_db():
     db = getattr(g, '_database', None)
     if db is None:
@@ -187,39 +188,30 @@ def retrive_urls(tag):
 def add_tag():
     if request.is_json:
         content = request.get_json()
-        id = uuid.uuid1()
+        new_id = uuid.uuid1()
+        new_tag = content["tag"]
+        new_url = content["url"]
         session.execute(
             """
-            INSERT INTO tags (
+            INSERT INTO tags
+            (
                 tag_id,
                 tag,
                 url
             )
             VALUES (%s, %s, %s)
             """,
-            (id,
-            content["tag"], content["url"]
+            (
+                new_id,
+                new_tag,
+                new_url
             )
         )
-        resp = json.dumps({"tag_id":str(id)})
+        resp = json.dumps({"tag_id":str(new_id)})
         #resp.status_code = 201
         return resp
     else:
         return "expected JSON"
-    #Project 2 code
-     # if request.is_json:
-     #    content = request.get_json()
-     #
-     #    query_args = (content["tag"], content["url"])
-     #    query = "INSERT INTO tags (tag, url) VALUES (?, ?)"
-     #
-     #    result = query_db(query, query_args)
-     #    resp = jsonify(result)
-     #    resp.status_code = 201
-     #    resp.headers['Location'] = f"/project1/{result['tag_id']}"
-     #    return resp
-     # else:
-     #    return "expected JSON"
 
 
 @click.command()
