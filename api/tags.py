@@ -13,7 +13,9 @@ import click
 import os
 import json
 import uuid
-#from flask.cli import AppGroup #this works
+
+PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
+DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'tags.db')
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -28,25 +30,12 @@ session = cluster.connect()
 session.set_keyspace('beepboopbackend')
 
 
-PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
-DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'tags.db')
-
-
-@app.errorhandler(404)
-def not_found(error=None):
-    message = [{
-            'status': 404,
-            'message': 'Not Found: ' + request.url
-    }]
-    resp = jsonify(message)
-    resp.status_code = 404
-    resp.content_type = "application/json"
-    return resp
-
+#gets a connection to our DB
 def get_db():
     db = getattr(g, '_database', None)
     if db is None:
         db = g._database = sqlite3.connect(DATABASE)
+        #db.execute('pragma foreign_keys=ON')
 
     def make_dicts(cursor, row):
         return dict((cursor.description[idx][0], value)
@@ -55,6 +44,14 @@ def get_db():
     db.row_factory = make_dicts
     return db
 
+#closes connection automatically
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(g, '_database', None)
+    if db is not None:
+        db.close()
+
+#run a query against our db
 def query_db(query, args=(), one=False):
     try:
         cur = get_db()
@@ -86,29 +83,46 @@ def query_db(query, args=(), one=False):
 
         return err_list_dict
 
+#----------------------------------------ROUTES----------------------------------------
 
-@app.teardown_appcontext
-def close_connection(exception):
-    db = getattr(g, '_database', None)
-    if db is not None:
-        db.close()
+@app.errorhandler(404)
+def not_found(error=None):
+    message = [{
+            'status': 404,
+            'message': 'Not Found: ' + request.url
+    }]
+    resp = jsonify(message)
+    resp.status_code = 404
+    resp.content_type = "application/json"
+    return resp
 
+#Get all tags
 @app.route('/tags/all', methods=['GET'])
-def comments_all():
+def tags_all():
+    objects = []
+    rows = session.execute('SELECT * FROM tags')
+    for row in rows:
+        result = {}
+        result["tag"] = row.tag
+        result["url"] = row.url
+        result["tag_id"] = row.tag_id
+        objects.append(result)
+    return json.dumps(objects)
 
-    query = 'SELECT * FROM tags;'
-    query_args = ("")
-
-    resp = query_db(query, query_args)
-    result = jsonify(resp)
-
-    if len(resp) > 0:
-        result.status_code = 200
-        result.content_type = "application/json"
-    else:
-        return not_found()
-
-    return result
+    #Projet 2 code
+    # query = 'SELECT * FROM tags;'
+    # query_args = ("")
+    #
+    # resp = query_db(query, query_args)
+    # result = jsonify(resp)
+    #
+    # if len(resp) > 0:
+    #     result.status_code = 200
+    #     result.content_type = "application/json"
+    # else:
+    #     return not_found()
+    #
+    # return result
 
 
 @app.route('/tags/url/<article_url>', methods=['GET'])
@@ -116,131 +130,245 @@ def retrive_tags(article_url):
 
     new_url = article_url.replace('=', '/')
 
-    query = 'SELECT * FROM tags Where url = ?;'
-    query_args = (new_url,)
+    objects = []
+    rows = session.execute("SELECT * FROM tags WHERE article_url="+str(new_url))
+    for row in rows:
+        result["tag"] = row.tag
+        result["url"] = row.url
+        result["tag_id"] = row.tag_id
+        objects.append(result)
+    return json.dumps(objects)
 
-    resp = query_db(query, query_args)
-    result = jsonify(resp)
-
-    if len(resp) > 0:
-        result.status_code = 200
-        result.content_type = "application/json"
-    else:
-        return not_found()
-
-    return result
+    #Project 2 code
+    # query = 'SELECT * FROM tags Where url = ?;'
+    # query_args = (new_url,)
+    #
+    # resp = query_db(query, query_args)
+    # result = jsonify(resp)
+    #
+    # if len(resp) > 0:
+    #     result.status_code = 200
+    #     result.content_type = "application/json"
+    # else:
+    #     return not_found()
+    #
+    # return result
 
 @app.route('/tags/tag/<tag>', methods=['GET'])
 def retrive_urls(tag):
 
-    query = 'SELECT * FROM tags WHERE tag = ?;'
-    query_args = (tag,)
+    objects = []
+    rows = session.execute("SELECT * FROM tags WHERE tag="+str(tag))
+    for row in rows:
+        result["tag"] = row.tag
+        result["url"] = row.url
+        result["tag_id"] = row.tag_id
+        objects.append(result)
+    return json.dumps(objects)
 
-    resp = query_db(query, query_args)
-    result = jsonify(resp)
+    #project 2 code
+    # query = 'SELECT * FROM tags WHERE tag = ?;'
+    # query_args = (tag,)
+    #
+    # resp = query_db(query, query_args)
+    # result = jsonify(resp)
+    #
+    # if len(resp) > 0:
+    #     result.status_code = 200
+    #     result.content_type = "application/json"
+    #
+    #     return result
+    # else:
+    #     return not_found()
 
-    if len(resp) > 0:
-        result.status_code = 200
-        result.content_type = "application/json"
 
-        return result
-    else:
-        return not_found()
-
-
-#use postman or curl
+#Post a new to tag
 @app.route('/tags', methods=['POST'])
 def add_tag():
-     if request.is_json:
+    if request.is_json:
         content = request.get_json()
-
-        query_args = (content["tag"], content["url"])
-        query = "INSERT INTO tags (tag, url) VALUES (?, ?)"
-
-        result = query_db(query, query_args)
-        resp = jsonify(result)
-        resp.status_code = 201
-        resp.headers['Location'] = f"/project1/{result['tag_id']}"
+        id = uuid.uuid1()
+        session.execute(
+            """
+            INSERT INTO tags (
+                tag_id,
+                tag,
+                url
+            )
+            VALUES (%s, %s, %s)
+            """,
+            (id,
+            content["tag"], content["url"]
+            )
+        )
+        resp = json.dumps({"tag_id":str(id)})
+        #resp.status_code = 201
         return resp
-     else:
+    else:
         return "expected JSON"
+    #Project 2 code
+     # if request.is_json:
+     #    content = request.get_json()
+     #
+     #    query_args = (content["tag"], content["url"])
+     #    query = "INSERT INTO tags (tag, url) VALUES (?, ?)"
+     #
+     #    result = query_db(query, query_args)
+     #    resp = jsonify(result)
+     #    resp.status_code = 201
+     #    resp.headers['Location'] = f"/project1/{result['tag_id']}"
+     #    return resp
+     # else:
+     #    return "expected JSON"
 
 
 @click.command()
 @click.argument('tag')
 @click.argument('url')
 def new_tag(tag, url):
-        query_args = (tag, url)
-        query = "INSERT INTO tags (tag, url) VALUES (?, ?)"
-
-        result = query_db(query, query_args)
-        resp = jsonify(result)
-        resp.status_code = 201
-        resp.headers['Location'] = f"/project1/{result['tag_id']}"
+    if request.is_json:
+        content = request.get_json()
+        id = uuid.uuid1()
+        session.execute(
+            """
+            INSERT INTO tags (
+                tag_id,
+                tag,
+                url
+            )
+            VALUES (%s, %s, %s)
+            """,
+            (id,
+            tag, url
+            )
+        )
+        resp = json.dumps({"tag_id":str(id)})
+        #resp.status_code = 201
         return resp
+    else:
+        return "expected JSON"
+
+        # Project 2 code
+        # query_args = (tag, url)
+        # query = "INSERT INTO tags (tag, url) VALUES (?, ?)"
+        #
+        # result = query_db(query, query_args)
+        # resp = jsonify(result)
+        # resp.status_code = 201
+        # resp.headers['Location'] = f"/project1/{result['tag_id']}"
+        # return resp
 
 
 #use postman or curl
 @app.route('/tags/existing/<url>', methods=['POST'])
 def add_tag_existing(url):
-     if request.is_json:
+    if request.is_json:
         content = request.get_json()
-
-        query_args = (content["tag"], url,)
-        query = "INSERT INTO tags (tag, url) VALUES (?, ?)"
-
-        result = query_db(query, query_args)
-        resp = jsonify(result)
-        resp.status_code = 201
-        resp.headers['Location'] = f"/project1/{result['tag_id']}"
+        id = uuid.uuid1()
+        session.execute(
+            """
+            INSERT INTO tags (
+                tag_id,
+                tag,
+                url
+            )
+            VALUES (%s, %s, %s)
+            """,
+            (id,
+            content["tag"], url
+            )
+        )
+        resp = json.dumps({"tag_id":str(id)})
+        #resp.status_code = 201
         return resp
-     else:
+    else:
         return "expected JSON"
+
+    #Project 2 code
+     # if request.is_json:
+     #    content = request.get_json()
+     #
+     #    query_args = (content["tag"], url,)
+     #    query = "INSERT INTO tags (tag, url) VALUES (?, ?)"
+     #
+     #    result = query_db(query, query_args)
+     #    resp = jsonify(result)
+     #    resp.status_code = 201
+     #    resp.headers['Location'] = f"/project1/{result['tag_id']}"
+     #    return resp
+     # else:
+     #    return "expected JSON"
 
 @click.command()
 @click.argument('url')
 @click.argument('tag')
 def add_existing_tag(url, tag):
-    query_args = (tag, url,)
-    query = "INSERT INTO tags (tag, url) VALUES (?, ?)"
+    if request.is_json:
+        content = request.get_json()
+        id = uuid.uuid1()
+        session.execute(
+            """
+            INSERT INTO tags (
+                tag_id,
+                url,
+                tag
+            )
+            VALUES (%s, %s, %s)
+            """,
+            (id,
+            url, tag
+            )
+        )
+        resp = json.dumps({"tag_id":str(id)})
+        #resp.status_code = 201
+        return resp
+    else:
+        return "expected JSON"
 
-    result = query_db(query, query_args)
-    resp = jsonify(result)
-    resp.status_code = 201
-    resp.headers['Location'] = f"/project1/{result['tag_id']}"
-    return resp
+    #Project 2 code
+    # query_args = (tag, url,)
+    # query = "INSERT INTO tags (tag, url) VALUES (?, ?)"
+    #
+    # result = query_db(query, query_args)
+    # resp = jsonify(result)
+    # resp.status_code = 201
+    # resp.headers['Location'] = f"/project1/{result['tag_id']}"
+    # return resp
 
 
 @app.route('/tags', methods=['DELETE'])
-def tag_delete():
+def tag_delete(tag_id):
+    rows = session.execute("DELETE FROM tags WHERE tag_id="+str(tag_id))
+    return ""
 
-    content = request.get_json()
-
-    query = "DELETE FROM tags WHERE url = ? AND tag = ?"
-    query_args = (content["url"], content["tag"])
-
-    result = query_db(query, query_args)
-    if type(result) == flask.Response:
-        return jsonify(result)
-    else:
-        resp = jsonify(result)
-        resp.status_code = 200
-        resp.content_type = "application/json"
-        return resp
+    #Project 2 code
+    # content = request.get_json()
+    #
+    # query = "DELETE FROM tags WHERE url = ? AND tag = ?"
+    # query_args = (content["url"], content["tag"])
+    #
+    # result = query_db(query, query_args)
+    # if type(result) == flask.Response:
+    #     return jsonify(result)
+    # else:
+    #     resp = jsonify(result)
+    #     resp.status_code = 200
+    #     resp.content_type = "application/json"
+    #     return resp
 
 @click.command()
 @click.argument('url')
 def delete_tag(url):
-    query = "DELETE FROM tags WHERE url = ?"
-    query_args = (url,)
+    rows = session.execute("DELETE FROM tags WHERE url="+str(url))
+    return "
 
-    result = query_db(query, query_args)
-    if type(result) == flask.Response:
-        return result
-
-@app.errorhandler(404)
-def page_not_found(e):
-    return "<h1>404</h1><p>The resource could not be found.</p>", 404
+    #Project 2 code
+    # query = "DELETE FROM tags WHERE url = ?"
+    # query_args = (url,)
+    #
+    # result = query_db(query, query_args)
+    # if type(result) == flask.Response:
+    #     return result
 
 
 if __name__ == '__main__':
