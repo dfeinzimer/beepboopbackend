@@ -360,7 +360,7 @@ def tag_delete(tag_id):
 @click.argument('url')
 def delete_tag(url):
     rows = session.execute("DELETE FROM tags WHERE url="+str(url))
-    return "
+    return None
 
     #Project 2 code
     # query = "DELETE FROM tags WHERE url = ?"
