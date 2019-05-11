@@ -159,26 +159,24 @@ def nth_comment(nth):
     #query = 'SELECT * FROM comments ORDER BY comment_id LIMIT ?'
     # note that ORDER BY should be by date
     query_args = (nth,)
-
     resp = query_db(query, query_args)
     result = jsonify(resp)
 
-#use postman or curl
+
 @app.route('/comments', methods=['POST'])
 def post_comment():
-     if request.is_json:
-        content = request.get_json()
+#     if request.is_json:
+#        content = request.get_json()
+#        query_args = (content["user_display_name"], content["comment"], content["article_url"], str(datetime.datetime.now()))
+#        query = "INSERT INTO comments (user_display_name, comment, article_url, comment_date) VALUES (?, ?, ?, ?)"
+#        result = query_db(query, query_args)
+#        resp = jsonify(result)
+#        resp.status_code = 201
+#        resp.headers['Location'] = f"/project1/{result['comment_id']}"
+#        return resp
+#     else:
+#        return "expected JSON"
 
-        query_args = (content["user_display_name"], content["comment"], content["article_url"], str(datetime.datetime.now()))
-        query = "INSERT INTO comments (user_display_name, comment, article_url, comment_date) VALUES (?, ?, ?, ?)"
-
-        result = query_db(query, query_args)
-        resp = jsonify(result)
-        resp.status_code = 201
-        resp.headers['Location'] = f"/project1/{result['comment_id']}"
-        return resp
-     else:
-        return "expected JSON"
 
 @click.command()
 @click.argument('user_display_name')

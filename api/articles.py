@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+
 import datetime
 import hashlib
 import sqlite3
@@ -12,12 +13,13 @@ from flask import request, jsonify
 from flask_basicauth import BasicAuth
 import os
 
+
 PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
 DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'articles.db')
 
+
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
-
 
 
 '''#############################################################################
@@ -30,8 +32,11 @@ session = cluster.connect()
 session.set_keyspace('beepboopbackend')
 
 
-
-#gets a connection to our DB
+'''#############################################################################
+Get a connection the sql db
+This should be deprecated and removed as everything should be in Cassandra by
+the end of project 3.
+#############################################################################'''
 def get_db():
     db = getattr(g, '_database', None)
     if db is None:
@@ -46,7 +51,9 @@ def get_db():
     return db
 
 
-#closes connection automatically
+'''#############################################################################
+Closes connection automatically
+#############################################################################'''
 @app.teardown_appcontext
 def close_connection(exception):
     db = getattr(g, '_database', None)
@@ -54,26 +61,28 @@ def close_connection(exception):
         db.close()
 
 
-#run a query against our db
+'''#############################################################################
+Run a query against the sql db
+This should be deprecated and removed as everything should be in Cassandra by
+the end of project 3.
+#############################################################################'''
 def query_db(query, args=(), one=False):
     try:
         cur = get_db()
         cursor = cur.cursor()
         article_id = {"article_id": ""}
-
         #using with automatically commits
         try:
             with cur:
                 cursor.execute(query, args)
                 rv = cursor.fetchall()
-
-                #gets the rowID of the last inserted row so we can get the url to the post
+                # gets the rowID of the last inserted row so we can get the url
+                # to the post
                 article_id["article_id"] = str(cursor.lastrowid)
 
             cur.close()
         except Exception as err:
             return [{"error": str(err), "query": query,}]
-
         if cursor.rowcount == 0:
             return not_found()
         elif int(article_id["article_id"]) != 0:
@@ -87,7 +96,11 @@ def query_db(query, args=(), one=False):
         return err_list_dict
 
 
-#----------------------------------------ROUTES----------------------------------------
+'''#############################################################################
+Routes
+#############################################################################'''
+
+
 @app.errorhandler(404)
 def not_found(error=None):
     message = {
@@ -102,7 +115,9 @@ def not_found(error=None):
     return resp
 
 
-#Get all articles
+'''#############################################################################
+Get all articles
+#############################################################################'''
 @app.route('/articles', methods=['GET'])
 def all_articles():
     objects = []
@@ -119,7 +134,10 @@ def all_articles():
         objects.append(result)
     return json.dumps(objects)
 
-#Post a new article
+
+'''#############################################################################
+Post a new article
+#############################################################################'''
 @app.route('/articles', methods=['POST'])
 def new_article():
     if request.is_json:
@@ -138,7 +156,8 @@ def new_article():
             (id,
             content["title"], content["content"],
             content["headline"], content["author"],
-            content["article_date"],str(datetime.date.today()),content['user_display_name'])
+            content["article_date"],str(datetime.date.today()),
+            content['user_display_name'])
         )
         resp = json.dumps({"article_id":str(id)})
         #resp.status_code = 201
@@ -151,7 +170,9 @@ def new_article():
 @app.route('/articles/<article_ID>', methods=['GET'])
 def get_article(article_ID):
     objects = []
-    rows = session.execute("SELECT * FROM articles WHERE article_id="+str(article_ID))
+    rows = session.execute("SELECT * FROM articles WHERE article_id="+
+        str(article_ID)
+    )
     for row in rows:
         result = {}
         result["article_date"] = row.article_date
