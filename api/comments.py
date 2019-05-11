@@ -46,6 +46,7 @@ def not_found(error=None):
     resp.content_type = "application/json"
     return resp
 
+
 def get_db():
     db = getattr(g, '_database', None)
     if db is None:
@@ -115,22 +116,17 @@ def comments_all():
 
 @app.route('/comments/count/<url>', methods=['GET'])
 def comments_count(url):
-
-    new_url = url.replace('=', '/')
-
-    query = 'SELECT count(*) as count FROM comments WHERE article_url = ?;'
-    query_args = (new_url,)
-
-    resp = query_db(query, query_args)
-    result = jsonify(resp)
-
-    if len(resp) > 0:
-        result.status_code = 200
-        result.content_type = "application/json"
-    else:
-        return not_found()
-
-    return result
+#    new_url = url.replace('=', '/')
+#    query = 'SELECT count(*) as count FROM comments WHERE article_url = ?;'
+#    query_args = (new_url,)
+#    resp = query_db(query, query_args)
+#    result = jsonify(resp)
+#    if len(resp) > 0:
+#        result.status_code = 200
+#        result.content_type = "application/json"
+#    else:
+#        return not_found()
+#    return result
 
 
 @app.route('/comments/<n>/<article_url>', methods=['GET'])
