@@ -132,22 +132,25 @@ def comments_count(url):
 
 @app.route('/comments/<n>/<article_url>', methods=['GET'])
 def get_nth_comments(n, article_url):
+    url = article_url.replace('=', '/')
+    rows = session.execute("SELECT * FROM comments")
+    count = 0
+    objects = []
+    result = {}
+    for row in rows:
+        result = {}
+        if row.article_url == url:
+            count = count + 1
+            result["article_url"] = row.article_url
+            result["comment"] = row.comment
+            result["comment_date"] = row.comment_date
+            result["comment_id"] = str(row.comment_id)
+            result["user_display_name"] = row.user_display_name
+            objects.append(result)
+            if count >= int(n):
+                break
+    return json.dumps(objects)
 
-    new_url = article_url.replace('=', '/')
-
-    query = "SELECT * FROM comments WHERE article_url = ? ORDER BY comment_date DESC LIMIT ?"
-    query_args = (new_url, n)
-
-    resp = query_db(query, query_args)
-    result = jsonify(resp)
-
-    if len(resp) > 0:
-        result.status_code = 200
-        result.content_type = "application/json"
-    else:
-        return jsonify([{"comment": ""}])
-
-    return result
 
 @click.command()
 @click.argument('nth')
