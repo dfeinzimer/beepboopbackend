@@ -176,6 +176,32 @@ def post_comment():
 #        return resp
 #     else:
 #        return "expected JSON"
+    if request.is_json:
+        content = request.get_json()
+        id = uuid.uuid1()
+        session.execute(
+            """
+            INSERT INTO comments (
+                comment_id,
+                article_url,
+                comment,
+                comment_date,
+                user_display_name
+            )
+            VALUES (%s, %s, %s, %s, %s)
+            """,
+            (
+                id,
+                content["article_url"],
+                content["comment"],
+                str(datetime.date.today()),
+                content['user_display_name'])
+            )
+        resp = json.dumps({"comment_id":str(id)})
+        #resp.status_code = 201
+        return resp
+    else:
+        return "Expected JSON"
 
 
 @click.command()
