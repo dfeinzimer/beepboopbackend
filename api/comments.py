@@ -113,7 +113,6 @@ def comments_all():
     return json.dumps(objects)
 
 
-
 @app.route('/comments/count/<url>', methods=['GET'])
 def comments_count(url):
     url = url.replace('=', '/')
@@ -152,17 +151,6 @@ def get_nth_comments(n, article_url):
     return json.dumps(objects)
 
 
-@click.command()
-@click.argument('nth')
-def nth_comment(nth):
-    query = 'SELECT * FROM comments WHERE comment_date BETWEEN 0 AND ?;'
-    #query = 'SELECT * FROM comments ORDER BY comment_id LIMIT ?'
-    # note that ORDER BY should be by date
-    query_args = (nth,)
-    resp = query_db(query, query_args)
-    result = jsonify(resp)
-
-
 '''#############################################################################
 Post a new comment
 #############################################################################'''
@@ -196,14 +184,37 @@ def post_comment():
         return "Expected JSON"
 
 
+'''#############################################################################
+Remove a comment by id
+#############################################################################'''
+@app.route('/comments/<comment_ID>', methods=['DELETE'])
+def comment_delete(comment_ID):
+    rows = session.execute(
+        "DELETE FROM comments WHERE comment_id="+str(comment_ID)
+    )
+    return ""
+
+
+'''#############################################################################
+Flask custom commands
+#############################################################################'''
+
+@click.command()
+@click.argument('comment_ID')
+def delete_comment(comment_ID):
+    query = "DELETE FROM comments WHERE comment_id = ?"
+    query_args = (comment_ID,)
+    result = query_db(query, query_args)
+    if type(result) == flask.Response:
+        return result
+
+
 @click.command()
 @click.argument('user_display_name')
 @click.argument('comment')
 def new_comment(user_display_name, comment):
-
     query_args = (user_display_name, comment, str(datetime.datetime.now()))
     query = "INSERT INTO comments (user_display_name, comment, comment_date) VALUES (?, ?, ?)"
-
     result = query_db(query, query_args)
     resp = jsonify(result)
     resp.status_code = 201
@@ -211,24 +222,15 @@ def new_comment(user_display_name, comment):
     return resp
 
 
-'''#############################################################################
-Remove a comment by id
-#############################################################################'''
-@app.route('/comments/<comment_ID>', methods=['DELETE'])
-def comment_delete(comment_ID):
-    rows = session.execute("DELETE FROM comments WHERE comment_id="+str(comment_ID))
-    return ""
-
-
 @click.command()
-@click.argument('comment_ID')
-def delete_comment(comment_ID):
-    query = "DELETE FROM comments WHERE comment_id = ?"
-    query_args = (comment_ID,)
-
-    result = query_db(query, query_args)
-    if type(result) == flask.Response:
-        return result
+@click.argument('nth')
+def nth_comment(nth):
+    query = 'SELECT * FROM comments WHERE comment_date BETWEEN 0 AND ?;'
+    #query = 'SELECT * FROM comments ORDER BY comment_id LIMIT ?'
+    # note that ORDER BY should be by date
+    query_args = (nth,)
+    resp = query_db(query, query_args)
+    result = jsonify(resp)
 
 
 @app.errorhandler(404)
