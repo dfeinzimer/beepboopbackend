@@ -16,6 +16,8 @@ Start Scylla: `docker start scylla`
 
 Fill the databases: `python3 fill_all.py`
 
+Open a Scylla CQL session: `docker exec -it scylla cqlsh`
+
 Start the services: `cd ../.. && foreman start --formation all=3`
 
 RSS: Check the api docs for the RSS feeder for what URLs to hit.
