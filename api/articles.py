@@ -190,23 +190,17 @@ def get_article(article_ID):
 #edit an individual article
 @app.route('/articles/<article_ID>', methods=['PATCH'])
 def edit_article(article_ID):
-
     if request.is_json:
-
         query = "UPDATE articles SET "
         query_args = []
         content = request.get_json()
-
         for key, value in content.items():
             query += key + " = ?, "
             query_args.append(value)
-
         query += "last_modified = ? WHERE article_id = ?"
         query_args.append(str(datetime.date.today()))
         query_args.append(article_ID)
-
         result = query_db(query, query_args)
-
         if type(result) == flask.Response:
             return result
         else:
@@ -214,7 +208,6 @@ def edit_article(article_ID):
             resp.status_code = 200
             resp.content_type = "application/json"
             return resp
-
     else:
         return "Expected JSON"
 
