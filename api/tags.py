@@ -133,34 +133,35 @@ def tags_all():
 
 '''#############################################################################
 Get all tags for article url x
-TESTED, NOT WORKING
+TESTED, WORKING
 #############################################################################'''
 @app.route('/tags/url/<article_url>', methods=['GET'])
 def retrive_tags(article_url):
-    new_url = article_url.replace('=', '/')
+#    objects = []
+#    new_url = "490ebb13-01a6-45c5-9170-545aa0f37b8f"
+#    rows = session.execute("SELECT * FROM tags WHERE tag_id="+str(new_url))
+#    #rows = session.execute("SELECT * FROM tags WHERE tag_id="+str(""))
+#    for row in rows:
+#        result = {}
+#        result["tag"] = row.tag
+#        result["url"] = row.url
+#        result["tag_id"] = str(row.tag_id)
+#        objects.append(result)
+#    return json.dumps(objects)
+    url = article_url.replace('=', '/')
+    rows = session.execute("SELECT * FROM tags")
+    count = 0
     objects = []
-    rows = session.execute("SELECT * FROM tags WHERE article_url="+str(new_url))
+    result = {}
     for row in rows:
-        result["tag"] = row.tag
-        result["url"] = row.url
-        result["tag_id"] = str(row.tag_id)
-        objects.append(result)
+        result = {}
+        if row.url == url:
+            result["tag_id"] = str(row.tag_id)
+            result["tag"] = row.tag
+            result["url"] = row.url
+            objects.append(result)
     return json.dumps(objects)
 
-    #Project 2 code
-    # query = 'SELECT * FROM tags Where url = ?;'
-    # query_args = (new_url,)
-    #
-    # resp = query_db(query, query_args)
-    # result = jsonify(resp)
-    #
-    # if len(resp) > 0:
-    #     result.status_code = 200
-    #     result.content_type = "application/json"
-    # else:
-    #     return not_found()
-    #
-    # return result
 
 @app.route('/tags/tag/<tag>', methods=['GET'])
 def retrive_urls(tag):
