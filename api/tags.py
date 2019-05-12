@@ -96,9 +96,11 @@ def query_db(query, args=(), one=False):
 
         return err_list_dict
 
+
 '''#############################################################################
 Routes
 #############################################################################'''
+
 
 @app.errorhandler(404)
 def not_found(error=None):
@@ -114,6 +116,7 @@ def not_found(error=None):
 
 '''#############################################################################
 Get all tags
+TESTED, WORKING
 #############################################################################'''
 @app.route('/tags/all', methods=['GET'])
 def tags_all():
@@ -128,17 +131,19 @@ def tags_all():
     return json.dumps(objects)
 
 
+'''#############################################################################
+Get all tags for article url x
+TESTED, NOT WORKING
+#############################################################################'''
 @app.route('/tags/url/<article_url>', methods=['GET'])
 def retrive_tags(article_url):
-
     new_url = article_url.replace('=', '/')
-
     objects = []
     rows = session.execute("SELECT * FROM tags WHERE article_url="+str(new_url))
     for row in rows:
         result["tag"] = row.tag
         result["url"] = row.url
-        result["tag_id"] = row.tag_id
+        result["tag_id"] = str(row.tag_id)
         objects.append(result)
     return json.dumps(objects)
 
@@ -165,7 +170,7 @@ def retrive_urls(tag):
     for row in rows:
         result["tag"] = row.tag
         result["url"] = row.url
-        result["tag_id"] = row.tag_id
+        result["tag_id"] = str(row.tag_id)
         objects.append(result)
     return json.dumps(objects)
 
