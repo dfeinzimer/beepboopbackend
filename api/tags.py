@@ -51,7 +51,9 @@ def get_db():
     return db
 
 
-#closes connection automatically
+'''#############################################################################
+Closes connection automatically
+#############################################################################'''
 @app.teardown_appcontext
 def close_connection(exception):
     db = getattr(g, '_database', None)
@@ -59,7 +61,10 @@ def close_connection(exception):
         db.close()
 
 
-#run a query against our db
+'''#############################################################################
+Run a query against our db.
+Can this be removed?
+#############################################################################'''
 def query_db(query, args=(), one=False):
     try:
         cur = get_db()
@@ -91,7 +96,9 @@ def query_db(query, args=(), one=False):
 
         return err_list_dict
 
-#----------------------------------------ROUTES----------------------------------------
+'''#############################################################################
+Routes
+#############################################################################'''
 
 @app.errorhandler(404)
 def not_found(error=None):
@@ -104,7 +111,10 @@ def not_found(error=None):
     resp.content_type = "application/json"
     return resp
 
-#Get all tags
+
+'''#############################################################################
+Get all tags
+#############################################################################'''
 @app.route('/tags/all', methods=['GET'])
 def tags_all():
     objects = []
@@ -113,24 +123,9 @@ def tags_all():
         result = {}
         result["tag"] = row.tag
         result["url"] = row.url
-        result["tag_id"] = row.tag_id
+        result["tag_id"] = str(row.tag_id)
         objects.append(result)
     return json.dumps(objects)
-
-    #Projet 2 code
-    # query = 'SELECT * FROM tags;'
-    # query_args = ("")
-    #
-    # resp = query_db(query, query_args)
-    # result = jsonify(resp)
-    #
-    # if len(resp) > 0:
-    #     result.status_code = 200
-    #     result.content_type = "application/json"
-    # else:
-    #     return not_found()
-    #
-    # return result
 
 
 @app.route('/tags/url/<article_url>', methods=['GET'])
