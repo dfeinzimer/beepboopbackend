@@ -115,8 +115,7 @@ def not_found(error=None):
 
 
 '''#############################################################################
-Get all tags
-TESTED, WORKING
+Get all tags [TESTED, WORKING]
 #############################################################################'''
 @app.route('/tags/all', methods=['GET'])
 def tags_all():
@@ -132,22 +131,10 @@ def tags_all():
 
 
 '''#############################################################################
-Get all tags for article url x
-TESTED, WORKING
+Get all tags for article url x [TESTED, WORKING]
 #############################################################################'''
 @app.route('/tags/url/<article_url>', methods=['GET'])
 def retrive_tags(article_url):
-#    objects = []
-#    new_url = "490ebb13-01a6-45c5-9170-545aa0f37b8f"
-#    rows = session.execute("SELECT * FROM tags WHERE tag_id="+str(new_url))
-#    #rows = session.execute("SELECT * FROM tags WHERE tag_id="+str(""))
-#    for row in rows:
-#        result = {}
-#        result["tag"] = row.tag
-#        result["url"] = row.url
-#        result["tag_id"] = str(row.tag_id)
-#        objects.append(result)
-#    return json.dumps(objects)
     url = article_url.replace('=', '/')
     rows = session.execute("SELECT * FROM tags")
     count = 0
@@ -163,9 +150,13 @@ def retrive_tags(article_url):
     return json.dumps(objects)
 
 
+'''#############################################################################
+Get a tag by its id [NEEDS TESTING]
+Thoughts: Probably will not work in current fashion as we're selecting by tag
+column which is not indexed.
+#############################################################################'''
 @app.route('/tags/tag/<tag>', methods=['GET'])
 def retrive_urls(tag):
-
     objects = []
     rows = session.execute("SELECT * FROM tags WHERE tag="+str(tag))
     for row in rows:
@@ -174,7 +165,6 @@ def retrive_urls(tag):
         result["tag_id"] = str(row.tag_id)
         objects.append(result)
     return json.dumps(objects)
-
     #project 2 code
     # query = 'SELECT * FROM tags WHERE tag = ?;'
     # query_args = (tag,)
@@ -191,7 +181,9 @@ def retrive_urls(tag):
     #     return not_found()
 
 
-#Post a new to tag
+'''#############################################################################
+Post a new tag to article url [NEEDS TESTING]
+#############################################################################'''
 @app.route('/tags', methods=['POST'])
 def add_tag():
     if request.is_json:
@@ -259,7 +251,9 @@ def new_tag(tag, url):
         # return resp
 
 
-#use postman or curl
+'''#############################################################################
+Is this a possible duplicate of "Post a new tag to article url"? Remove if so.
+#############################################################################'''
 @app.route('/tags/existing/<url>', methods=['POST'])
 def add_tag_existing(url):
     if request.is_json:
@@ -283,7 +277,6 @@ def add_tag_existing(url):
         return resp
     else:
         return "expected JSON"
-
     #Project 2 code
      # if request.is_json:
      #    content = request.get_json()
@@ -336,6 +329,9 @@ def add_existing_tag(url, tag):
     # return resp
 
 
+'''#############################################################################
+Delete a tag by its article url and tag id [NEEDS TESTING]
+#############################################################################'''
 @app.route('/tags', methods=['DELETE'])
 def tag_delete(tag_id):
     rows = session.execute("DELETE FROM tags WHERE tag_id="+str(tag_id))
