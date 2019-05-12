@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+
 import datetime
 import hashlib
 import sqlite3
@@ -14,11 +15,14 @@ import os
 import json
 import uuid
 
+
 PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
 DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'tags.db')
 
+
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
+
 
 '''#############################################################################
 Setup Cassandra, connect to a cluster and keyspace.
@@ -28,6 +32,7 @@ from cassandra import ReadTimeout
 cluster = Cluster(['172.17.0.2'])
 session = cluster.connect()
 session.set_keyspace('beepboopbackend')
+
 
 '''#############################################################################
 Get a database connection.
@@ -45,12 +50,14 @@ def get_db():
     db.row_factory = make_dicts
     return db
 
+
 #closes connection automatically
 @app.teardown_appcontext
 def close_connection(exception):
     db = getattr(g, '_database', None)
     if db is not None:
         db.close()
+
 
 #run a query against our db
 def query_db(query, args=(), one=False):
