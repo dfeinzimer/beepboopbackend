@@ -163,19 +163,11 @@ def nth_comment(nth):
     result = jsonify(resp)
 
 
+'''#############################################################################
+Post a new comment
+#############################################################################'''
 @app.route('/comments', methods=['POST'])
 def post_comment():
-#     if request.is_json:
-#        content = request.get_json()
-#        query_args = (content["user_display_name"], content["comment"], content["article_url"], str(datetime.datetime.now()))
-#        query = "INSERT INTO comments (user_display_name, comment, article_url, comment_date) VALUES (?, ?, ?, ?)"
-#        result = query_db(query, query_args)
-#        resp = jsonify(result)
-#        resp.status_code = 201
-#        resp.headers['Location'] = f"/project1/{result['comment_id']}"
-#        return resp
-#     else:
-#        return "expected JSON"
     if request.is_json:
         content = request.get_json()
         id = uuid.uuid1()
@@ -219,20 +211,14 @@ def new_comment(user_display_name, comment):
     return resp
 
 
-
-@app.route('/comments/<int:comment_ID>', methods=['DELETE'])
+'''#############################################################################
+Remove a comment by id
+#############################################################################'''
+@app.route('/comments/<comment_ID>', methods=['DELETE'])
 def comment_delete(comment_ID):
-    query = "DELETE FROM comments WHERE comment_id = ?"
-    query_args = (comment_ID,)
+    rows = session.execute("DELETE FROM comments WHERE comment_id="+str(comment_ID))
+    return ""
 
-    result = query_db(query, query_args)
-    if type(result) == flask.Response:
-        return result
-    else:
-        resp = jsonify(result)
-        resp.status_code = 200
-        resp.content_type = "application/json"
-        return resp
 
 @click.command()
 @click.argument('comment_ID')
