@@ -167,7 +167,7 @@ def retrive_urls(tag):
 
 
 '''#############################################################################
-[NEEDS TESTING] Post a new tag to a given article url
+[TESTED, WORKING] Post a new tag to a given article url
 #############################################################################'''
 @app.route('/tags', methods=['POST'])
 def add_tag():
