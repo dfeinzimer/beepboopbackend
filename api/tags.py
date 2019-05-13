@@ -1,6 +1,11 @@
 #!/usr/bin/python3
 
 
+# How to test
+#DELETE - curl -i -X DELETE http://localhost:5000/tags/delete/tag_id
+#POST - use test_comments_api.tavern.yaml
+
+
 import datetime
 import hashlib
 import sqlite3
@@ -199,6 +204,20 @@ def add_tag():
         return "expected JSON"
 
 
+'''#############################################################################
+[TESTED, WORKING] Delete a tag by its article url and tag id
+#############################################################################'''
+@app.route('/tags/<tag_id>', methods=['DELETE'])
+def tag_delete(tag_id):
+    rows = session.execute("DELETE FROM tags WHERE tag_id="+tag_id)
+    return "OK"
+
+
+'''#############################################################################
+Flask custom commands
+#############################################################################'''
+
+
 @click.command()
 @click.argument('tag')
 @click.argument('url')
@@ -235,47 +254,6 @@ def new_tag(tag, url):
         # resp.headers['Location'] = f"/project1/{result['tag_id']}"
         # return resp
 
-
-'''#############################################################################
-Is this a possible duplicate of "Post a new tag to article url"? Remove if so.
-#############################################################################'''
-@app.route('/tags/existing/<url>', methods=['POST'])
-def add_tag_existing(url):
-    if request.is_json:
-        content = request.get_json()
-        id = uuid.uuid1()
-        session.execute(
-            """
-            INSERT INTO tags (
-                tag_id,
-                tag,
-                url
-            )
-            VALUES (%s, %s, %s)
-            """,
-            (id,
-            content["tag"], url
-            )
-        )
-        resp = json.dumps({"tag_id":str(id)})
-        #resp.status_code = 201
-        return resp
-    else:
-        return "expected JSON"
-    #Project 2 code
-     # if request.is_json:
-     #    content = request.get_json()
-     #
-     #    query_args = (content["tag"], url,)
-     #    query = "INSERT INTO tags (tag, url) VALUES (?, ?)"
-     #
-     #    result = query_db(query, query_args)
-     #    resp = jsonify(result)
-     #    resp.status_code = 201
-     #    resp.headers['Location'] = f"/project1/{result['tag_id']}"
-     #    return resp
-     # else:
-     #    return "expected JSON"
 
 @click.command()
 @click.argument('url')
@@ -314,29 +292,6 @@ def add_existing_tag(url, tag):
     # return resp
 
 
-'''#############################################################################
-[NEEDS TESTING] Delete a tag by its article url and tag id
-#############################################################################'''
-@app.route('/tags', methods=['DELETE'])
-def tag_delete(tag_id):
-    rows = session.execute("DELETE FROM tags WHERE tag_id="+str(tag_id))
-    return ""
-
-    #Project 2 code
-    # content = request.get_json()
-    #
-    # query = "DELETE FROM tags WHERE url = ? AND tag = ?"
-    # query_args = (content["url"], content["tag"])
-    #
-    # result = query_db(query, query_args)
-    # if type(result) == flask.Response:
-    #     return jsonify(result)
-    # else:
-    #     resp = jsonify(result)
-    #     resp.status_code = 200
-    #     resp.content_type = "application/json"
-    #     return resp
-
 @click.command()
 @click.argument('url')
 def delete_tag(url):
@@ -354,8 +309,3 @@ def delete_tag(url):
 
 if __name__ == '__main__':
     app.run()
-
-
-# How to test
-#DELETE - curl -i -X DELETE http://localhost:5000/tags/delete/tag_id
-#POST - use test_comments_api.tavern.yaml
