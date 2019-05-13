@@ -115,7 +115,7 @@ def not_found(error=None):
 
 
 '''#############################################################################
-Get all tags [TESTED, WORKING]
+[TESTED, WORKING] Get all tags
 #############################################################################'''
 @app.route('/tags/all', methods=['GET'])
 def tags_all():
@@ -131,7 +131,7 @@ def tags_all():
 
 
 '''#############################################################################
-Get all tags for article url x [TESTED, WORKING]
+[TESTED, WORKING] Get all tags for article url x
 #############################################################################'''
 @app.route('/tags/url/<article_url>', methods=['GET'])
 def retrive_tags(article_url):
@@ -151,38 +151,23 @@ def retrive_tags(article_url):
 
 
 '''#############################################################################
-Get a tag by its id [NEEDS TESTING]
-Thoughts: Probably will not work in current fashion as we're selecting by tag
-column which is not indexed.
+[TESTED, WORKING] Get a tag by its id
 #############################################################################'''
 @app.route('/tags/tag/<tag>', methods=['GET'])
 def retrive_urls(tag):
     objects = []
-    rows = session.execute("SELECT * FROM tags WHERE tag="+str(tag))
+    rows = session.execute("SELECT * FROM tags WHERE tag_id="+str(tag))
     for row in rows:
+        result = {}
         result["tag"] = row.tag
         result["url"] = row.url
         result["tag_id"] = str(row.tag_id)
         objects.append(result)
     return json.dumps(objects)
-    #project 2 code
-    # query = 'SELECT * FROM tags WHERE tag = ?;'
-    # query_args = (tag,)
-    #
-    # resp = query_db(query, query_args)
-    # result = jsonify(resp)
-    #
-    # if len(resp) > 0:
-    #     result.status_code = 200
-    #     result.content_type = "application/json"
-    #
-    #     return result
-    # else:
-    #     return not_found()
 
 
 '''#############################################################################
-Post a new tag to article url [NEEDS TESTING]
+[NEEDS TESTING] Post a new tag to a given article url
 #############################################################################'''
 @app.route('/tags', methods=['POST'])
 def add_tag():
@@ -330,7 +315,7 @@ def add_existing_tag(url, tag):
 
 
 '''#############################################################################
-Delete a tag by its article url and tag id [NEEDS TESTING]
+[NEEDS TESTING] Delete a tag by its article url and tag id
 #############################################################################'''
 @app.route('/tags', methods=['DELETE'])
 def tag_delete(tag_id):
