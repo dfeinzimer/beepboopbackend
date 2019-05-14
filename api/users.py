@@ -17,10 +17,8 @@ PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
 DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'users.db')
 
 
-
-app = Flask(__name__)
+app = flask.Flask(__name__)
 app.config["DEBUG"] = True
-
 
 
 #DATABASE.init_app(app)
@@ -184,50 +182,40 @@ def get_all():
     # return jsonify(result)
 
 
+'''#############################################################################
+[TESTED: ERROR] Create a new user
+#############################################################################'''
 @app.route('/users/new', methods=['POST'])
 def create_user():
     if request.is_json:
-        pass_hash = hashlib.md5(data["password"].encode())
         content = request.get_json()
+        pass_hash = hashlib.md5(content["password"].encode())
         id = uuid.uuid1()
         session.execute(
         """
-        INSERT INTO comments (
+        INSERT INTO users (
+            user_id,
             email,
             display_name,
             pass_hash
         )
-        VALUES (%s, %s, %s)
+        VALUES (%s, %s, %s, %s)
         """,
         (
             id,
             content["email"],
             content["display_name"],
-            content['pass_hash'])
-        )
-    resp = json.dumps({"comment_id":str(id)})
-    #resp.status_code = 201
-    return resp
-else:
-    return "Expected JSON"
-
-    #   Project 2 code
-    #     data = request.get_json()
-    #     pass_hash = hashlib.md5(data["password"].encode())
-    #     query = "INSERT INTO users(email, display_name, pass_hash) values(?, ?, ?)"
-    #     query_args = (data["email"], data["display_name"], pass_hash.hexdigest())
-    #     err, result = query_db(query, query_args)
-    #     if err == False:
-    #         resp = jsonify(result)
-    #         resp.status_code = 201
-    #         resp.headers['Location'] = "/users"
-    #         return resp
-    #     else:
-    #         return result
-    # else:
-    #     return ('No JSON', 400, {})
+            str(pass_hash.hexdigest())
+        ))
+        resp = json.dumps({"user_id":str(id)})
+        return resp
+    else:
+        return "Expected JSON"
 
 
+'''#############################################################################
+[NEEDS TESTING] Delete a user
+#############################################################################'''
 @app.route('/users', methods=['DELETE'])
 #@basic_auth.required
 def remove_user(email, pass_hash):
@@ -249,6 +237,9 @@ def remove_user(email, pass_hash):
     #     return "Expected JSON"
 
 
+'''#############################################################################
+[NEEDS TESTING] Change a password
+#############################################################################'''
 @app.route('/users', methods=['PATCH'])
 #@basic_auth.required
 def change_password():
