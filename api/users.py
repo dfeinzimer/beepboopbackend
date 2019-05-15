@@ -236,42 +236,37 @@ def remove_user():
 @app.route('/users', methods=['PATCH'])
 #@basic_auth.required
 def change_password():
-    if request.is_json:
-        query = "UPDATE users SET "
-        query_args = []
-        content = request.get_json()
-        for key, value in content.items():
-            query += key + " = ?, "
-            query_args.append(value)
-        query += "pass_hash = ? WHERE email = ? AND pass_hash = ?"
-        query_args.append(hashlib.md5(data["new_password"].encode()).hexdigest())
-        query_args.append(data["email"])
-        query_args.append(hashlib.md5(data["password"].encode()).hexdigest())
-        result = query_db(query, query_args)
-        if type(result) == flask.Response:
-            return result
-        else:
-            resp = jsonify(result)
-            resp.status_code = 200
-            resp.content_type = "application/json"
-            return resp
-    else:
-        return "Expected JSON"
-
-        # Project 2 code
-    #     data = request.get_json()
-    #
-    #     if user_exists(data["email"], data["password"]):
-    #         query = "UPDATE users SET pass_hash = ? WHERE email = ? AND pass_hash = ?"
-    #         query_args = (hashlib.md5(data["new_password"].encode()).hexdigest(),
-    #                       data["email"],
-    #                       hashlib.md5(data["password"].encode()).hexdigest())
-    #         err, result = query_db(query, query_args)
-    #         return jsonify(result)
-    #     else:
-    #         return not_found()
-    # else:
-    #     return "Expected JSON"
+    content = request.get_json()
+    rows = session.execute('SELECT * FROM users')
+    found = False
+    id = None
+    for row in rows:
+        if row.email == content["email"]:
+            found = True
+            id = row.user_id
+            display_name = row.display_name
+    if found:
+        session.execute("DELETE FROM users WHERE user_id="+str(id))
+        pass_hash = hashlib.md5(content["new_password"].encode())
+        session.execute(
+            """
+            INSERT INTO users (
+                user_id,
+                email,
+                display_name,
+                pass_hash
+            )
+            VALUES (%s, %s, %s, %s)
+            """,
+            (
+                id,
+                content["email"],
+                display_name,
+                str(pass_hash.hexdigest())
+            )
+        )
+    resp = json.dumps({"user_id":str(id)})
+    return resp
 
 
 @app.route('/auth', methods=['GET'])
