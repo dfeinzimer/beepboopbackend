@@ -107,16 +107,14 @@ def not_found(error=None):
             'status': 404,
             'message': 'Not Found: ' + request.url,
     }
-
     resp = jsonify(message)
     resp.status_code = 404
     resp.content_type = "applciation/json"
-
     return resp
 
 
 '''#############################################################################
-Get all articles
+[TESTED, WORKING] Get all articles
 #############################################################################'''
 @app.route('/articles', methods=['GET'])
 def all_articles():
@@ -136,7 +134,7 @@ def all_articles():
 
 
 '''#############################################################################
-Post a new article
+[TESTED, WORKING] Post a new article
 #############################################################################'''
 @app.route('/articles', methods=['POST'])
 def new_article():
@@ -166,7 +164,9 @@ def new_article():
         return "expected JSON"
 
 
-#Get an individual article by ID
+'''#############################################################################
+[TESTED, WORKING] Get an individual article by ID
+#############################################################################'''
 @app.route('/articles/<article_ID>', methods=['GET'])
 def get_article(article_ID):
     objects = []
@@ -186,40 +186,62 @@ def get_article(article_ID):
     return json.dumps(objects)
 
 
-
-#edit an individual article
+'''#############################################################################
+[TESTED, WORKING] Edit an individual article
+#############################################################################'''
 @app.route('/articles/<article_ID>', methods=['PATCH'])
 def edit_article(article_ID):
-    if request.is_json:
-        query = "UPDATE articles SET "
-        query_args = []
-        content = request.get_json()
-        for key, value in content.items():
-            query += key + " = ?, "
-            query_args.append(value)
-        query += "last_modified = ? WHERE article_id = ?"
-        query_args.append(str(datetime.date.today()))
-        query_args.append(article_ID)
-        result = query_db(query, query_args)
-        if type(result) == flask.Response:
-            return result
-        else:
-            resp = jsonify(result)
-            resp.status_code = 200
-            resp.content_type = "application/json"
-            return resp
-    else:
-        return "Expected JSON"
+    content = request.get_json()
+    rows = session.execute('SELECT * FROM articles')
+    found = False
+    id = None
+    for row in rows:
+        if str(row.article_id) == article_ID:
+            found = True
+            id = row.article_id
+    if found:
+        session.execute("DELETE FROM articles WHERE article_id="+str(id))
+        session.execute(
+            """
+            INSERT INTO articles (
+                article_id,
+                article_date,
+                author,
+                content,
+                headline,
+                last_modified,
+                title,
+                user_display_name
+            )
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            """,
+            (
+                id,
+                content["article_date"],
+                content["author"],
+                content["content"],
+                content["headline"],
+                str(datetime.date.today()),
+                content["title"],
+                content["user_display_name"]
+            )
+        )
+    resp = json.dumps({"article_id":str(id)})
+    return resp
 
 
-#delete an individual article
+'''#############################################################################
+[TESTED, WORKING] Delete an individual article
+#############################################################################'''
 @app.route('/articles/<article_ID>', methods=['DELETE'])
 def delete_article(article_ID):
     rows = session.execute("DELETE FROM articles WHERE article_id="+str(article_ID))
     return ""
 
 
-#Get n most recent articles
+'''#############################################################################
+[TESTED, WORKING, NEEDS FIX] Get n most recent articles
+#############################################################################'''
 @app.route('/articles/recent/<num_of_articles>', methods=['GET'])
 def get_recent_articles(num_of_articles):
     objects = []
@@ -237,7 +259,9 @@ def get_recent_articles(num_of_articles):
     return json.dumps(objects)
 
 
-#Get n most recent articles meta data
+'''#############################################################################
+[TESTED, WORKING, NEEDS FIX] Get n most recent articles meta data
+#############################################################################'''
 @app.route('/articles/recent/meta/<num_of_articles>', methods=['GET'])
 def get_recent_articles_metadata(num_of_articles):
     objects = []

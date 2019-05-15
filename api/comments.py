@@ -99,6 +99,9 @@ def close_connection(exception):
         db.close()
 
 
+'''#############################################################################
+[TESTED, WORKING] Get all comments
+#############################################################################'''
 @app.route('/comments/all', methods=['GET'])
 def comments_all():
     objects = []
@@ -113,6 +116,9 @@ def comments_all():
     return json.dumps(objects)
 
 
+'''#############################################################################
+[TESTED, WORKING] Get a comment count on a certain article
+#############################################################################'''
 @app.route('/comments/count/<url>', methods=['GET'])
 def comments_count(url):
     url = url.replace('=', '/')
@@ -129,6 +135,9 @@ def comments_count(url):
     return json.dumps(objects)
 
 
+'''#############################################################################
+[TESTED, WORKING] Get n most recent comment on article url x
+#############################################################################'''
 @app.route('/comments/<n>/<article_url>', methods=['GET'])
 def get_nth_comments(n, article_url):
     url = article_url.replace('=', '/')
@@ -152,7 +161,7 @@ def get_nth_comments(n, article_url):
 
 
 '''#############################################################################
-Post a new comment
+[TESTED, WORKING] Post a new comment
 #############################################################################'''
 @app.route('/comments', methods=['POST'])
 def post_comment():
@@ -185,7 +194,7 @@ def post_comment():
 
 
 '''#############################################################################
-Remove a comment by id
+[TESTED, WORKING] Delete comment with ID x
 #############################################################################'''
 @app.route('/comments/<comment_ID>', methods=['DELETE'])
 def comment_delete(comment_ID):
