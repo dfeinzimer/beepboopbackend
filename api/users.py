@@ -164,6 +164,9 @@ def unauth():
     return resp
 
 
+'''#############################################################################
+[TESTED, WORKING] Get all users
+#############################################################################'''
 @app.route('/users', methods=['GET'])
 def get_all():
     objects = []
@@ -175,11 +178,6 @@ def get_all():
         result["pass_hash"] = row.pass_hash
         objects.append(result)
     return json.dumps(objects)
-
-    # Project 2 code
-    # query = "SELECT * FROM users"
-    # err, result = query_db(query)
-    # return jsonify(result)
 
 
 '''#############################################################################
