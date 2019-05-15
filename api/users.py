@@ -183,7 +183,7 @@ def get_all():
 
 
 '''#############################################################################
-[TESTED: ERROR] Create a new user
+[TESTED, WORKING] Create a new user
 #############################################################################'''
 @app.route('/users/new', methods=['POST'])
 def create_user():

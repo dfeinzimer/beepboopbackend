@@ -7,7 +7,7 @@ The number of entries to add in each table.
 num_articles = 10
 num_comments = 10
 num_tags = 10
-num_users = 10
+num_users = 50
 
 new_user_ids = []
 
