@@ -70,7 +70,7 @@ def full():
 
     #Get tags for each article and add whole json obj into list
     for obj in meta.json():
-        url = obj["location"].replace("/", "=")
+        url = obj["location"].replace("articles/", "")
 
         tag = requests.get(f"http://localhost/tags/url/{url}", auth=basic_auth_creds)
         comment_count = requests.get(f"http://localhost/comments/count/{url}", auth=basic_auth_creds)
@@ -129,7 +129,7 @@ def comments():
     rss = []
 
     for r in articles:
-        url = r["location"].replace("/", "=")
+        url = r["location"].replace("articles/", "")
         comments.append(requests.get(f'http://localhost/comments/100/{url}', auth=basic_auth_creds).json())
 
     for comment in comments:
@@ -139,12 +139,12 @@ def comments():
                 #com_obj.append({"user": c["user_display_name"], "comment": c["comment"]})
                 com_obj.append(f"{c['user_display_name']}: {c['comment']}")
 
-        if "article_url" in comment:
-            rss.append(Item(
-                link = f"http://localhost/comments/{comment[0]['article_url']}",
-                comments = f"http://localhost/comments/{comment[0]['article_url']}",
-                description = str(com_obj).strip('[]')
-            ))
+            if "article_url" in c:
+                rss.append(Item(
+                    link = f"http://localhost/comments/{comment[0]['article_url']}",
+                    comments = f"http://localhost/comments/{comment[0]['article_url']}",
+                    description = str(com_obj).strip('[]')
+                ))
 
     feed = Feed(
     title = "Full text article feed",
