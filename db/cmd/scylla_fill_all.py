@@ -41,7 +41,7 @@ for x in range(0,num_users):
         """,
         (
             newid,
-            "email"+str(x)+"@email.com",
+            "user"+str(x)+"@email.com",
             "user"+str(x),
             str(pass_hash.hexdigest())
         )

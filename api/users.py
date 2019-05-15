@@ -212,27 +212,22 @@ def create_user():
 
 
 '''#############################################################################
-[NEEDS TESTING] Delete a user
+[TESTED, WORKING] Delete a user
 #############################################################################'''
 @app.route('/users', methods=['DELETE'])
 #@basic_auth.required
-def remove_user(email, pass_hash):
-    rows = session.execute(
-        "DELETE FROM users WHERE email=+str(email) AND pass_hash=+str(pass_hash)"    )
+def remove_user():
+    content = request.get_json()
+    rows = session.execute('SELECT * FROM users')
+    found = False
+    id = None
+    for row in rows:
+        if row.email == content["email"]:
+            found = True
+            id = str(row.user_id)
+    if found:
+        session.execute("DELETE FROM users WHERE user_id="+id)
     return ""
-
-    # Project 2 code
-    # if request.is_json:
-    #     data = request.get_json()
-    #     if user_exists(data["email"], data["password"]):
-    #         query = "DELETE FROM users WHERE email = ? AND pass_hash = ?"
-    #         query_args = (data["email"], hashlib.md5(data["password"].encode()).hexdigest())
-    #         err, resp = query_db(query, query_args)
-    #         return jsonify(resp)
-    #     else:
-    #         return not_found()
-    # else:
-    #     return "Expected JSON"
 
 
 '''#############################################################################
