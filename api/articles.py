@@ -249,6 +249,7 @@ def get_recent_articles(num_of_articles):
     for row in rows:
         result = {}
         result["article_date"] = row.article_date
+        result["article_id"] = str(row.article_id)
         result["author"] = row.author
         result["content"] = row.content
         result["headline"] = row.headline
@@ -269,10 +270,9 @@ def get_recent_articles_metadata(num_of_articles):
     for row in rows:
         result = {}
         result["article_date"] = row.article_date
-        #result["article_id"] = row.article_id
+        result["article_id"] = str(row.article_id)
         result["author"] = row.author
-        #result["location"] = "articles/"+str(row.article_id)
-        #result["location"] = row.article_id TODO UUIDs aren't serializable
+        result["location"] = "articles/" + str(row.article_id)
         result["title"] = row.title
         result["user_display_name"] = row.user_display_name
         objects.append(result)

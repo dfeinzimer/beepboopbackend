@@ -139,7 +139,7 @@ def comments():
                 #com_obj.append({"user": c["user_display_name"], "comment": c["comment"]})
                 com_obj.append(f"{c['user_display_name']}: {c['comment']}")
 
-        if "article_url" in comment[0]:
+        if "article_url" in comment:
             rss.append(Item(
                 link = f"http://localhost/comments/{comment[0]['article_url']}",
                 comments = f"http://localhost/comments/{comment[0]['article_url']}",
