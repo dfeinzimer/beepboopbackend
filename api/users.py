@@ -231,7 +231,7 @@ def remove_user():
 
 
 '''#############################################################################
-[NEEDS TESTING] Change a password
+[TESTED, WORKING] Change a password
 #############################################################################'''
 @app.route('/users', methods=['PATCH'])
 #@basic_auth.required
