@@ -1,4 +1,6 @@
+import datetime
 import hashlib
+import random
 import uuid
 
 '''#############################################################################
@@ -7,9 +9,10 @@ The number of entries to add in each table.
 num_articles = 10
 num_comments = 10
 num_tags = 10
-num_users = 50
+num_users = 10
 
 new_user_ids = []
+new_article_ids = []
 
 
 '''#############################################################################
@@ -55,8 +58,11 @@ for x in new_user_ids:
 Fill the articles table
 #############################################################################'''
 for x in range(0,num_articles):
+    newid = uuid.uuid1()
+    new_article_ids.append(newid)
     session.execute(
-        """INSERT INTO articles (
+        """
+        INSERT INTO articles (
             article_id,
             title,
             content,
@@ -65,37 +71,48 @@ for x in range(0,num_articles):
             article_date,
             user_display_name,
             last_modified
-        ) VALUES (
-            uuid(),
-            'Article title """+str(x)+"""',
-            'Article content """+str(x)+"""',
-            'Article headline """+str(x)+"""',
+        )
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        """,
+        (
+            newid,
+            "Article title "+str(x),
+            "Article content "+str(x),
+            "Article headline "+str(x),
             'Anonymous',
-            '5/6/2019',
-            'user"""+str(x)+"""',
-            '5/6/2019'
-        );"""
+            str(datetime.date.today()),
+            "user"+str(x),
+            str(datetime.date.today())
+        )
     )
+print("Created new articles:")
+for x in new_user_ids:
+    print("\t",x)
 
 
 '''#############################################################################
 Fill the comments table
 #############################################################################'''
 for x in range(0,num_comments):
+    newid = uuid.uuid1()
     session.execute(
-        """INSERT INTO comments (
+        """
+        INSERT INTO comments (
             comment_id,
             article_url,
             comment,
             comment_date,
             user_display_name
-        ) VALUES (
-            uuid(),
-            'articles/1',
-            'Article comment """+str(x)+"""',
-            '5/6/2019',
-            'user"""+str(x)+"""'
-        );"""
+        )
+        VALUES (%s, %s, %s, %s, %s)
+        """,
+        (
+            newid,
+            "articles/"+str(random.choice(new_article_ids)),
+            "Article comment "+str(x),
+            str(datetime.date.today()),
+            "user"+str(x)
+        )
     )
 
 
@@ -103,14 +120,19 @@ for x in range(0,num_comments):
 Fill the tags table
 #############################################################################'''
 for x in range(0,num_tags):
+    newid = uuid.uuid1()
     session.execute(
-        """INSERT INTO tags (
+        """
+        INSERT INTO tags (
             tag_id,
             tag,
             url
-        ) VALUES (
-            uuid(),
-            'myTag"""+str(x)+"""',
-            'articles/1'
-        );"""
+        )
+        VALUES (%s, %s, %s)
+        """,
+        (
+            newid,
+            "myTag"+str(x),
+            "articles/"+str(random.choice(new_article_ids))
+        )
     )

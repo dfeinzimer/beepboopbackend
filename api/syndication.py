@@ -21,7 +21,7 @@ session.set_keyspace('beepboopbackend')
 s = requests.Session()
 s.mount('http://', CachingHTTPAdapter())
 
-basic_auth_creds = ('user5@email.com', 'password5')
+basic_auth_creds = ('user6@email.com', 'password6')
 
 @app.errorhandler(404)
 def not_found(error=None):
@@ -46,7 +46,7 @@ def summary():
             title = obj["title"],
             link = f"http://localhost/{obj['location']}",
             author = obj["author"],
-            pubDate = datetime.datetime.strptime(obj["article_date"], "%m/%d/%Y")
+            pubDate = datetime.datetime.strptime(obj["article_date"], "%Y-%m-%d")
         ))
 
     feed = Feed(
@@ -73,7 +73,7 @@ def full():
 
     #Get tags for each article and add whole json obj into list
     for obj in meta.json():
-        url = obj["location"].replace("articles/", "")
+        url = obj["location"].replace("/", "=")
 
         tag = requests.get(f"http://localhost/tags/url/{url}", auth=basic_auth_creds)
         comment_count = requests.get(f"http://localhost/comments/count/{url}", auth=basic_auth_creds)
@@ -103,7 +103,7 @@ def full():
             title = article["title"],
             link = f"http://localhost/articles/{article['article_id']}",
             author = article["author"],
-            pubDate = datetime.datetime.strptime(article["article_date"], "%m/%d/%Y"),
+            pubDate = datetime.datetime.strptime(article["article_date"], "%Y-%m-%d"),
             categories = category_obj,
             comments = comment_num[0],
             description = article["content"]
@@ -132,7 +132,7 @@ def comments():
     rss = []
 
     for r in articles:
-        url = r["location"].replace("articles/", "")
+        url = r["location"].replace("/", "=")
         comments.append(requests.get(f'http://localhost/comments/100/{url}', auth=basic_auth_creds).json())
 
     for comment in comments:

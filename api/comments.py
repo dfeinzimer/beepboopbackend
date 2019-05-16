@@ -139,7 +139,7 @@ def comments_count(url):
         resp.headers['Last-Modified'] = f"{objects[0]['comment_date']}"
     
         if 'If-Modified-Since' in request.headers:
-            if request.headers['If-Modified-Since'] < objects[0]['comment_date']:
+            if datetime.datetime.strptime(request.headers['If-Modified-Since'], "%Y-%m-%d") < datetime.datetime.strptime(objects[0]['comment_date'], "%Y-%m-%d"):
                 return resp
             else :
                 res = jsonify()
@@ -179,7 +179,7 @@ def get_nth_comments(n, article_url):
         resp.headers['Last-Modified'] = f"{objects[0]['comment_date']}"
     
         if 'If-Modified-Since' in request.headers:
-            if request.headers['If-Modified-Since'] < objects[0]['comment_date']:
+            if datetime.datetime.strptime(request.headers['If-Modified-Since'], "%Y-%m-%d") < datetime.datetime.strptime(objects[0]['comment_date'], "%Y-%m-%d"):
                 return resp
             else :
                 res = jsonify()
