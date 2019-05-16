@@ -1,6 +1,7 @@
 from rfeed import *
 from flask import Flask, g, jsonify, Response, request
 import requests
+from httpcache import CachingHTTPAdapter
 import datetime
 import json
 import uuid
@@ -17,8 +18,10 @@ cluster = Cluster(['172.17.0.2'])
 session = cluster.connect()
 session.set_keyspace('beepboopbackend')
 
+s = requests.Session()
+s.mount('http://', CachingHTTPAdapter())
 
-basic_auth_creds = ('test@email.com', 'test@email.com')
+basic_auth_creds = ('user5@email.com', 'password5')
 
 @app.errorhandler(404)
 def not_found(error=None):

@@ -122,18 +122,33 @@ def comments_all():
 @app.route('/comments/count/<url>', methods=['GET'])
 def comments_count(url):
     url = url.replace('=', '/')
-    rows = session.execute("SELECT article_url FROM comments")
+    rows = session.execute("SELECT article_url, comment_date FROM comments")
     count = 0
     objects = []
     result = {}
     for row in rows:
-        result = {}
         if row.article_url == url:
             count = count + 1
+            result["comment_date"] = row.comment_date
     result["count"] = count
-    objects.append(result)
-    return json.dumps(objects)
 
+    objects.append(result)
+
+    resp = jsonify(objects)
+    if 'comment_date' in objects[0]:
+        resp.headers['Last-Modified'] = f"{objects[0]['comment_date']}"
+    
+        if 'If-Modified-Since' in request.headers:
+            if request.headers['If-Modified-Since'] < objects[0]['comment_date']:
+                return resp
+            else :
+                res = jsonify()
+                res.status_code = 304
+                return res
+        else:
+            return resp
+    else:
+        return resp
 
 '''#############################################################################
 [TESTED, WORKING] Get n most recent comment on article url x
@@ -157,8 +172,23 @@ def get_nth_comments(n, article_url):
             objects.append(result)
             if count >= int(n):
                 break
-    return json.dumps(objects)
+    
+    resp = jsonify(objects)
 
+    if len(objects) > 0:
+        resp.headers['Last-Modified'] = f"{objects[0]['comment_date']}"
+    
+        if 'If-Modified-Since' in request.headers:
+            if request.headers['If-Modified-Since'] < objects[0]['comment_date']:
+                return resp
+            else :
+                res = jsonify()
+                res.status_code = 304
+                return res
+        else:
+            return resp
+    else:
+        return resp
 
 '''#############################################################################
 [TESTED, WORKING] Post a new comment

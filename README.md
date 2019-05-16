@@ -43,6 +43,29 @@ Create the `beepboopbackend` keyspace for Cassandra. First run: `docker exec -it
 ## Things To Be Installed:
 
 [Things To Be Installed Wiki Page](https://github.com/kernelpop/beepboopbackend/wiki/Things-To-Be-Installed)
+- `pip3 install tavern`
+
+- `pip3 install foreman`
+
+- `pip3 install flask-cassandra`
+
+- `pip3 install cassandra-driver`
+
+- `pip3 install httpcache`
+
+- `sudo apt install python-pytest`
+
+- `sudo apt install ruby-foreman`
+
+- `sudo apt install --yes nginx-extras`
+
+- `sudo apt install --yes python3-cassandra`
+
+- `sudo pip3 install Flask-BasicAuth`
+
+- `sudo apt install --yes docker.io`
+
+- `sudo usermod -aG docker $USER`
 
 
 

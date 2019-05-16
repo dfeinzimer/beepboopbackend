@@ -59,9 +59,10 @@ Create a users table
 #############################################################################'''
 session.execute(
     """CREATE TABLE IF NOT EXISTS users(
-        user_id uuid PRIMARY KEY,
+        user_id uuid,
         email text,
         pass_hash text,
-        display_name text
+        display_name text, 
+        PRIMARY KEY (email, pass_hash)
     )"""
 )

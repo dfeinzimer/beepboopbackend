@@ -18,40 +18,44 @@
 
 
 upstream users_services  {
-  server 127.0.0.1:5300;
-  server 127.0.0.1:5301;
-  server 127.0.0.1:5302;
+	server 127.0.0.1:5300;
+	server 127.0.0.1:5301;
+	server 127.0.0.1:5302;
 }
 
 upstream articles_services  {
-  server 127.0.0.1:5000;
-  server 127.0.0.1:5001;
-  server 127.0.0.1:5002;
+	server 127.0.0.1:5000;
+	server 127.0.0.1:5001;
+	server 127.0.0.1:5002;
 }
 
 upstream tags_services  {
-  server 127.0.0.1:5200;
-  server 127.0.0.1:5201;
-  server 127.0.0.1:5202;
+	server 127.0.0.1:5200;
+	server 127.0.0.1:5201;
+	server 127.0.0.1:5202;
 }
 
 upstream comments_services  {
-  server 127.0.0.1:5100;
-  server 127.0.0.1:5101;
-  server 127.0.0.1:5102;
+	server 127.0.0.1:5100;
+	server 127.0.0.1:5101;
+	server 127.0.0.1:5102;
 }
 
 upstream syndication_services  {
-  server 127.0.0.1:5400;
-  server 127.0.0.1:5401;
-  server 127.0.0.1:5402;
+	server 127.0.0.1:5400;
+	server 127.0.0.1:5401;
+	server 127.0.0.1:5402;
 }
 
 
 
 # Default server configuration
 #
+
+proxy_cache_path /etc/nginx/cache keys_zone=mycache:10m;
+
 server {
+
 	listen 80 default_server;
 	listen [::]:80 default_server;
 
@@ -90,11 +94,15 @@ server {
 	location /users {
 
 		auth_request /auth;
+		proxy_pass_request_headers on;
+		proxy_pass_request_body on;
 		proxy_pass http://users_services/users;
 	}
 
 	location /users/new {
 
+		proxy_pass_request_headers on;
+		proxy_pass_request_body on;
 		proxy_pass http://users_services/users/new;
 	}
 
@@ -102,23 +110,31 @@ server {
 	location /articles {
 
 		auth_request /auth;
+		proxy_pass_request_headers on;
+		proxy_pass_request_body on;
 		proxy_pass http://articles_services/articles;
 	}
 
 	location /tags {
 
 		auth_request /auth;
+		proxy_pass_request_headers on;
+		proxy_pass_request_body on;
 		proxy_pass http://tags_services/tags;
 	}
 
 	location /comments {
 
 		auth_request /auth;
+		proxy_pass_request_headers on;
+		proxy_pass_request_body on;
 		proxy_pass http://comments_services/comments;
 	}
 
 	location /syndication {
 
+		proxy_pass_request_headers on;
+		proxy_pass_request_body on;
 		proxy_pass http://syndication_services/syndication;
 	}
 
@@ -126,13 +142,16 @@ server {
 	location = /auth {
 		internal;
 		proxy_pass              http://users_services/auth;
-	  proxy_pass_header  			Authorization;
-    proxy_set_header 				Authorization $http_authorization;
-    proxy_pass_request_body off;
-    proxy_set_header 				Content-Length "";
-    proxy_set_header 				X-Original-URI $request_uri;
+		proxy_pass_header  			Authorization;
+		proxy_set_header 				Authorization $http_authorization;
+		proxy_pass_request_body off;
+		proxy_set_header 				Content-Length "";
+		proxy_set_header 				X-Original-URI $request_uri;
+		proxy_cache mycache;
+		proxy_cache_key "$http_authorization";
+		proxy_cache_valid any 5m;
 	}
- 
+
 
 	# pass PHP scripts to FastCGI server
 	#

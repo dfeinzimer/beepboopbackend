@@ -170,9 +170,8 @@ def new_article():
 @app.route('/articles/<article_ID>', methods=['GET'])
 def get_article(article_ID):
     objects = []
-    rows = session.execute("SELECT * FROM articles WHERE article_id="+
-        str(article_ID)
-    )
+    query = f"SELECT * FROM articles WHERE article_id = {str(article_ID)}"
+    rows = session.execute(query)
     for row in rows:
         result = {}
         result["article_date"] = row.article_date
@@ -183,7 +182,19 @@ def get_article(article_ID):
         result["title"] = row.title
         result["user_display_name"] = row.user_display_name
         objects.append(result)
-    return json.dumps(objects)
+    
+    resp = jsonify(objects)
+    resp.headers['Last-Modified'] = f"{objects[0]['last_modified']}"
+    
+    if 'If-Modified-Since' in request.headers:
+        if request.headers['If-Modified-Since'] < objects[0]['last_modified']:
+            return resp
+        else :
+            res = jsonify()
+            res.status_code = 304
+            return res
+    else:
+        return resp
 
 
 '''#############################################################################
@@ -240,7 +251,7 @@ def delete_article(article_ID):
 
 
 '''#############################################################################
-[TESTED, WORKING, NEEDS FIX] Get n most recent articles
+[TESTED, WORKING] Get n most recent articles
 #############################################################################'''
 @app.route('/articles/recent/<num_of_articles>', methods=['GET'])
 def get_recent_articles(num_of_articles):
@@ -257,11 +268,23 @@ def get_recent_articles(num_of_articles):
         result["title"] = row.title
         result["user_display_name"] = row.user_display_name
         objects.append(result)
-    return json.dumps(objects)
+    
+    resp = jsonify(objects)
+    resp.headers['Last-Modified'] = f"{objects[0]['last_modified']}"
+    
+    if 'If-Modified-Since' in request.headers:
+        if request.headers['If-Modified-Since'] < objects[0]['last_modified']:
+            return resp
+        else :
+            res = jsonify()
+            res.status_code = 304
+            return res
+    else:
+        return resp
 
 
 '''#############################################################################
-[TESTED, WORKING, NEEDS FIX] Get n most recent articles meta data
+[TESTED, WORKING] Get n most recent articles meta data
 #############################################################################'''
 @app.route('/articles/recent/meta/<num_of_articles>', methods=['GET'])
 def get_recent_articles_metadata(num_of_articles):
@@ -275,8 +298,22 @@ def get_recent_articles_metadata(num_of_articles):
         result["location"] = "articles/" + str(row.article_id)
         result["title"] = row.title
         result["user_display_name"] = row.user_display_name
+        result["last_modified"] = row.last_modified
         objects.append(result)
-    return json.dumps(objects)
+    
+    resp = jsonify(objects)
+    resp.headers['Last-Modified'] = f"{objects[0]['last_modified']}"
+    resp.headers["Content-Type"] = "json; charset=utf-8"
+    
+    if 'If-Modified-Since' in request.headers:
+        if datetime.datetime.strptime(request.headers['If-Modified-Since'], "%m/%d/%Y") < datetime.datetime.strptime(objects[0]['last_modified'], "%m/%d/%Y"):
+            return resp
+        else :
+            res = jsonify()
+            res.status_code = 304
+            return res
+    else:
+        return resp
 
 
 if __name__ == '__main__':

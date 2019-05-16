@@ -43,19 +43,11 @@ session.set_keyspace('beepboopbackend')
 
 class auth(BasicAuth):
     def check_credentials(self, username, password):
-        pass_hash = hashlib.md5(password.encode())
-        objects = []
-        rows = session.execute('SELECT * FROM users')
-        for row in rows:
-            result = {}
-            result["email"] = row.email
-            result["display_name"] = row.display_name
-            result["pass_hash"] = row.pass_hash
-            objects.append(result)
-            if len(objects) > 0:
-                return True
-            else:
-                return False
+        rows = session.execute("""SELECT count(*) FROM users WHERE email = %s AND pass_hash = %s""", (username, hashlib.md5(password.encode()).hexdigest()))
+        if rows:
+            return True
+        else:
+            return False
 
         # Project 2 code
         # pass_hash = hashlib.md5(password.encode())
@@ -75,18 +67,11 @@ basic_auth = auth(app)
 
 
 def user_exists(username, password):
-        objects = []
-        rows = session.execute('SELECT * FROM users')
-        for row in rows:
-            result = {}
-            result["email"] = row.email
-            result["display_name"] = row.display_name
-            result["pass_hash"] = row.pass_hash
-            objects.append(result)
-            if len(objects) > 0:
-                return True
-            else:
-                return False
+        rows = session.execute("""SELECT count(*) FROM users WHERE email = %s AND pass_hash = %s""", (username, hashlib.md5(password.encode()).hexdigest()))
+        if rows:
+            return True
+        else:
+            return False
 
         # Project 2 code
         # pass_hash = hashlib.md5(password.encode())
