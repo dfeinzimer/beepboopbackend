@@ -85,7 +85,7 @@ Nginx auth_request module
 
     https://docs.nginx.com/nginx/admin-guide/security-controls/configuring-subrequest-authentication/
     
-## Seige Test Results
+## Siege Test Results
 From Project 2
     Results from project 2 All 3 urls from rss
     
