@@ -45,3 +45,8 @@ session.execute(
     """DROP TABLE IF EXISTS users"""
 )
 print("users table dropped",'\n')
+
+session.execute(
+    """DROP KEYSPACE beepboopbackend;"""
+)
+print("keyspace dropped", '\n')

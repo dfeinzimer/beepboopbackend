@@ -4,9 +4,17 @@ Setup Cassandra, connect to a cluster and keyspace.
 from cassandra.cluster import Cluster
 cluster = Cluster(['172.17.0.2'])
 session = cluster.connect()
-session.set_keyspace('beepboopbackend')
+
+KEYSPACE = "beepboopbackend"
 
 
+session.execute("""
+    CREATE KEYSPACE IF NOT EXISTS %s
+    WITH replication = { 'class': 'SimpleStrategy', 'replication_factor': '2' }
+    """ % KEYSPACE)
+
+
+session.set_keyspace(KEYSPACE)
 
 '''#############################################################################
 Create an articles table

@@ -18,8 +18,11 @@ cluster = Cluster(['172.17.0.2'])
 session = cluster.connect()
 session.set_keyspace('beepboopbackend')
 
+
 s = requests.Session()
 s.mount('http://', CachingHTTPAdapter())
+s.mount('https://', CachingHTTPAdapter())
+
 
 basic_auth_creds = ('user6@email.com', 'password6')
 
