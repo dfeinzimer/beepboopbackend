@@ -86,7 +86,7 @@ Nginx auth_request module
     https://docs.nginx.com/nginx/admin-guide/security-controls/configuring-subrequest-authentication/
     
 ## Siege Test Results
-From Project 2
+
     Results from project 2 All 3 urls from rss
     
     siege -t 1M  http://localhost/syndication/summary, http://localhost/syndication/full, http://localhost/syndication/comments -c 25 
@@ -106,8 +106,7 @@ From Project 2
     Failed transactions:	           0
     Longest transaction:	        2.60
     Shortest transaction:	        1.31
- 
-From Project 3
+
     Results from project 3 All 3 urls from rss
 
     siege -t 1M  http://localhost/syndication/summary, http://localhost/syndication/full, http://localhost/syndication/comments -c 25 
