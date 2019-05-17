@@ -130,7 +130,8 @@ def all_articles():
         result["title"] = row.title
         result["user_display_name"] = row.user_display_name
         objects.append(result)
-    return json.dumps(objects)
+    resp = jsonify(objects)
+    return resp
 
 
 '''#############################################################################
@@ -182,10 +183,10 @@ def get_article(article_ID):
         result["title"] = row.title
         result["user_display_name"] = row.user_display_name
         objects.append(result)
-    
+
     resp = jsonify(objects)
     resp.headers['Last-Modified'] = f"{objects[0]['last_modified']}"
-    
+
     if 'If-Modified-Since' in request.headers:
         if datetime.datetime.strptime(request.headers['If-Modified-Since'], "%Y-%m-%d") < datetime.datetime.strptime(objects[0]['last_modified'], "%Y-%m-%d"):
             return resp
@@ -268,10 +269,10 @@ def get_recent_articles(num_of_articles):
         result["title"] = row.title
         result["user_display_name"] = row.user_display_name
         objects.append(result)
-    
+
     resp = jsonify(objects)
     resp.headers['Last-Modified'] = f"{objects[0]['last_modified']}"
-    
+
     if 'If-Modified-Since' in request.headers:
         if datetime.datetime.strptime(request.headers['If-Modified-Since'], "%Y-%m-%d") < datetime.datetime.strptime(objects[0]['last_modified'], "%Y-%m-%d"):
             return resp
@@ -300,11 +301,11 @@ def get_recent_articles_metadata(num_of_articles):
         result["user_display_name"] = row.user_display_name
         result["last_modified"] = row.last_modified
         objects.append(result)
-    
+
     resp = jsonify(objects)
     resp.headers['Last-Modified'] = f"{objects[0]['last_modified']}"
     resp.headers["Content-Type"] = "json; charset=utf-8"
-    
+
     if 'If-Modified-Since' in request.headers:
         if datetime.datetime.strptime(request.headers['If-Modified-Since'], "%Y-%m-%d") < datetime.datetime.strptime(objects[0]['last_modified'], "%Y-%m-%d"):
             return resp
