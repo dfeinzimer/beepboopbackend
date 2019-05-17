@@ -9,13 +9,13 @@
 
 ## Setup:
 
-Nginx configuration:  Replace code in `/etc/nginx/sites-enabled/default` with code in the `nginx-setup/sites-enabled-default` fileOnce foreman has started, compare the ports for each service with the ports in the upstream portion of the nginx config file.  Alter if necessary.
+Nginx configuration:  Replace code in your local `/etc/nginx/sites-enabled/default` with the code in the project file `nginx-setup/sites-enabled-default`
+
+Once foreman has started, compare the ports for each service with the ports in the upstream portion of the nginx config file.  Alter if necessary.
 
 Start Scylla: `docker start scylla`
 Create the databases: `cd db/cmd/ && python3 scylla_create_all.py`
-
 Fill the databases: `cd db/cmd/ && python3 scylla_fill_all.py`
-
 To delete database: `cd db/cmd/ && python3 scylla_destroy_all.py`
 
 

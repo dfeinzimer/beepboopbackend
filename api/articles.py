@@ -14,8 +14,8 @@ from flask_basicauth import BasicAuth
 import os
 
 
-#PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
-#DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'articles.db')
+PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
+DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'articles.db')
 
 
 app = flask.Flask(__name__)
@@ -130,8 +130,7 @@ def all_articles():
         result["title"] = row.title
         result["user_display_name"] = row.user_display_name
         objects.append(result)
-    resp = jsonify(objects)
-    return resp
+    return jsonify(objects)
 
 
 '''#############################################################################
@@ -158,12 +157,8 @@ def new_article():
             content["article_date"],str(datetime.date.today()),
             content['user_display_name'])
         )
-        objects = []
-        result = {}
-        result["article_id"] = str(id)
-        objects.append(result)
-        resp = jsonify(objects)
-        resp.status_code = 201
+        resp =jsonify({"article_id":str(id)})
+        #resp.status_code = 201
         return resp
     else:
         return "expected JSON"
@@ -187,10 +182,10 @@ def get_article(article_ID):
         result["title"] = row.title
         result["user_display_name"] = row.user_display_name
         objects.append(result)
-
+    
     resp = jsonify(objects)
     resp.headers['Last-Modified'] = f"{objects[0]['last_modified']}"
-
+    
     if 'If-Modified-Since' in request.headers:
         if datetime.datetime.strptime(request.headers['If-Modified-Since'], "%Y-%m-%d") < datetime.datetime.strptime(objects[0]['last_modified'], "%Y-%m-%d"):
             return resp
@@ -242,12 +237,7 @@ def edit_article(article_ID):
                 content["user_display_name"]
             )
         )
-    objects = []
-    result = {}
-    result["article_id"] = str(id)
-    objects.append(result)
-    resp = jsonify(objects)
-    resp.status_code = 201
+    resp = jsonify({"article_id":str(id)})
     return resp
 
 
@@ -257,13 +247,7 @@ def edit_article(article_ID):
 @app.route('/articles/<article_ID>', methods=['DELETE'])
 def delete_article(article_ID):
     rows = session.execute("DELETE FROM articles WHERE article_id="+str(article_ID))
-    objects = []
-    result = {}
-    result["Status:"] = "OK"
-    objects.append(result)
-    resp = jsonify(objects)
-    resp.status_code = 201
-    return resp
+    return ""
 
 
 '''#############################################################################
@@ -284,10 +268,10 @@ def get_recent_articles(num_of_articles):
         result["title"] = row.title
         result["user_display_name"] = row.user_display_name
         objects.append(result)
-
+    
     resp = jsonify(objects)
     resp.headers['Last-Modified'] = f"{objects[0]['last_modified']}"
-
+    
     if 'If-Modified-Since' in request.headers:
         if datetime.datetime.strptime(request.headers['If-Modified-Since'], "%Y-%m-%d") < datetime.datetime.strptime(objects[0]['last_modified'], "%Y-%m-%d"):
             return resp
@@ -316,11 +300,11 @@ def get_recent_articles_metadata(num_of_articles):
         result["user_display_name"] = row.user_display_name
         result["last_modified"] = row.last_modified
         objects.append(result)
-
+    
     resp = jsonify(objects)
     resp.headers['Last-Modified'] = f"{objects[0]['last_modified']}"
-    resp.headers["Content-Type"] = "json; charset=utf-8"
-
+    resp.headers["Content-Type"] = "application/json"
+    
     if 'If-Modified-Since' in request.headers:
         if datetime.datetime.strptime(request.headers['If-Modified-Since'], "%Y-%m-%d") < datetime.datetime.strptime(objects[0]['last_modified'], "%Y-%m-%d"):
             return resp

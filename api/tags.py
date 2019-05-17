@@ -21,8 +21,8 @@ import json
 import uuid
 
 
-#PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
-#DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'tags.db')
+PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
+DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'tags.db')
 
 
 app = flask.Flask(__name__)
@@ -132,9 +132,7 @@ def tags_all():
         result["url"] = row.url
         result["tag_id"] = str(row.tag_id)
         objects.append(result)
-    resp = jsonify(objects)
-    resp.status_code = 201
-    return resp
+    return jsonify(objects)
 
 
 '''#############################################################################
@@ -154,9 +152,7 @@ def retrive_tags(article_url):
             result["tag"] = row.tag
             result["url"] = row.url
             objects.append(result)
-    resp = jsonify(objects)
-    resp.status_code = 201
-    return resp
+    return jsonify(objects)
 
 
 '''#############################################################################
@@ -172,9 +168,7 @@ def retrive_urls(tag):
         result["url"] = row.url
         result["tag_id"] = str(row.tag_id)
         objects.append(result)
-    resp = jsonify(objects)
-    resp.status_code = 201
-    return resp
+    return jsonify(objects)
 
 
 '''#############################################################################
@@ -203,12 +197,8 @@ def add_tag():
                 new_url
             )
         )
-        objects = []
-        result = {}
-        result["tag_id:"] = str(new_id)
-        objects.append(result)
-        resp = jsonify(objects)
-        resp.status_code = 201
+        resp = jsonify({"tag_id":str(new_id)})
+        #resp.status_code = 201
         return resp
     else:
         return "expected JSON"
@@ -220,13 +210,7 @@ def add_tag():
 @app.route('/tags/<tag_id>', methods=['DELETE'])
 def tag_delete(tag_id):
     rows = session.execute("DELETE FROM tags WHERE tag_id="+tag_id)
-    objects = []
-    result = {}
-    result["Status:"] = "OK"
-    objects.append(result)
-    resp = jsonify(objects)
-    resp.status_code = 201
-    return resp
+    return "OK"
 
 
 '''#############################################################################
@@ -254,7 +238,7 @@ def new_tag(tag, url):
             tag, url
             )
         )
-        resp = json.dumps({"tag_id":str(id)})
+        resp = jsonify({"tag_id":str(id)})
         #resp.status_code = 201
         return resp
     else:
@@ -291,7 +275,7 @@ def add_existing_tag(url, tag):
             url, tag
             )
         )
-        resp = json.dumps({"tag_id":str(id)})
+        resp = jsonify({"tag_id":str(id)})
         #resp.status_code = 201
         return resp
     else:
