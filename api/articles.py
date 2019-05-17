@@ -158,8 +158,12 @@ def new_article():
             content["article_date"],str(datetime.date.today()),
             content['user_display_name'])
         )
-        resp = json.dumps({"article_id":str(id)})
-        #resp.status_code = 201
+        objects = []
+        result = {}
+        result["article_id"] = str(id)
+        objects.append(result)
+        resp = jsonify(objects)
+        resp.status_code = 201
         return resp
     else:
         return "expected JSON"
@@ -238,7 +242,12 @@ def edit_article(article_ID):
                 content["user_display_name"]
             )
         )
-    resp = json.dumps({"article_id":str(id)})
+    objects = []
+    result = {}
+    result["article_id"] = str(id)
+    objects.append(result)
+    resp = jsonify(objects)
+    resp.status_code = 201
     return resp
 
 
