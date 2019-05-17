@@ -132,7 +132,9 @@ def tags_all():
         result["url"] = row.url
         result["tag_id"] = str(row.tag_id)
         objects.append(result)
-    return json.dumps(objects)
+    resp = jsonify(objects)
+    resp.status_code = 201
+    return resp
 
 
 '''#############################################################################
@@ -152,7 +154,9 @@ def retrive_tags(article_url):
             result["tag"] = row.tag
             result["url"] = row.url
             objects.append(result)
-    return json.dumps(objects)
+    resp = jsonify(objects)
+    resp.status_code = 201
+    return resp
 
 
 '''#############################################################################
@@ -168,7 +172,9 @@ def retrive_urls(tag):
         result["url"] = row.url
         result["tag_id"] = str(row.tag_id)
         objects.append(result)
-    return json.dumps(objects)
+    resp = jsonify(objects)
+    resp.status_code = 201
+    return resp
 
 
 '''#############################################################################
@@ -197,8 +203,12 @@ def add_tag():
                 new_url
             )
         )
-        resp = json.dumps({"tag_id":str(new_id)})
-        #resp.status_code = 201
+        objects = []
+        result = {}
+        result["tag_id:"] = str(new_id)
+        objects.append(result)
+        resp = jsonify(objects)
+        resp.status_code = 201
         return resp
     else:
         return "expected JSON"
@@ -210,7 +220,13 @@ def add_tag():
 @app.route('/tags/<tag_id>', methods=['DELETE'])
 def tag_delete(tag_id):
     rows = session.execute("DELETE FROM tags WHERE tag_id="+tag_id)
-    return "OK"
+    objects = []
+    result = {}
+    result["Status:"] = "OK"
+    objects.append(result)
+    resp = jsonify(objects)
+    resp.status_code = 201
+    return resp
 
 
 '''#############################################################################

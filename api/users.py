@@ -162,7 +162,9 @@ def get_all():
         result["display_name"] = row.display_name
         result["pass_hash"] = row.pass_hash
         objects.append(result)
-    return json.dumps(objects)
+    resp = jsonify(objects)
+    resp.status_code = 201
+    return resp
 
 
 '''#############################################################################
@@ -190,7 +192,12 @@ def create_user():
             content["display_name"],
             str(pass_hash.hexdigest())
         ))
-        resp = json.dumps({"user_id":str(id)})
+        objects = []
+        result = {}
+        result["user_id:"] = str(id)
+        objects.append(result)
+        resp = jsonify(objects)
+        resp.status_code = 201
         return resp
     else:
         return "Expected JSON"
@@ -212,7 +219,13 @@ def remove_user():
             id = str(row.user_id)
     if found:
         session.execute("DELETE FROM users WHERE user_id="+id)
-    return ""
+    objects = []
+    result = {}
+    result["Status:"] = "OK"
+    objects.append(result)
+    resp = jsonify(objects)
+    resp.status_code = 201
+    return resp
 
 
 '''#############################################################################
@@ -250,7 +263,15 @@ def change_password():
                 str(pass_hash.hexdigest())
             )
         )
-    resp = json.dumps({"user_id":str(id)})
+    #resp = json.dumps({"user_id":str(id)})
+    #return resp
+
+    objects = []
+    result = {}
+    result["user_id:"] = str(id)
+    objects.append(result)
+    resp = jsonify(objects)
+    resp.status_code = 201
     return resp
 
 
