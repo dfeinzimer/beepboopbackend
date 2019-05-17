@@ -113,7 +113,9 @@ def comments_all():
         result["comment_date"] = row.comment_date
         result["user_display_name"] = row.user_display_name
         objects.append(result)
-    return json.dumps(objects)
+    resp = jsonify(objects)
+    resp.status_code = 201
+    return resp
 
 
 '''#############################################################################
@@ -137,7 +139,7 @@ def comments_count(url):
     resp = jsonify(objects)
     if 'comment_date' in objects[0]:
         resp.headers['Last-Modified'] = f"{objects[0]['comment_date']}"
-    
+
         if 'If-Modified-Since' in request.headers:
             if datetime.datetime.strptime(request.headers['If-Modified-Since'], "%Y-%m-%d") < datetime.datetime.strptime(objects[0]['comment_date'], "%Y-%m-%d"):
                 return resp
@@ -172,12 +174,12 @@ def get_nth_comments(n, article_url):
             objects.append(result)
             if count >= int(n):
                 break
-    
+
     resp = jsonify(objects)
 
     if len(objects) > 0:
         resp.headers['Last-Modified'] = f"{objects[0]['comment_date']}"
-    
+
         if 'If-Modified-Since' in request.headers:
             if datetime.datetime.strptime(request.headers['If-Modified-Since'], "%Y-%m-%d") < datetime.datetime.strptime(objects[0]['comment_date'], "%Y-%m-%d"):
                 return resp
@@ -216,8 +218,12 @@ def post_comment():
                 str(datetime.date.today()),
                 content['user_display_name'])
             )
-        resp = json.dumps({"comment_id":str(id)})
-        #resp.status_code = 201
+        objects = []
+        result = {}
+        result["comment_id:"] = str(id)
+        objects.append(result)
+        resp = jsonify(objects)
+        resp.status_code = 201
         return resp
     else:
         return "Expected JSON"
@@ -231,7 +237,13 @@ def comment_delete(comment_ID):
     rows = session.execute(
         "DELETE FROM comments WHERE comment_id="+str(comment_ID)
     )
-    return ""
+    objects = []
+    result = {}
+    result["Status:"] = "OK"
+    objects.append(result)
+    resp = jsonify(objects)
+    resp.status_code = 201
+    return resp
 
 
 '''#############################################################################

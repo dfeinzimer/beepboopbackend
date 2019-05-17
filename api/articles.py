@@ -257,7 +257,13 @@ def edit_article(article_ID):
 @app.route('/articles/<article_ID>', methods=['DELETE'])
 def delete_article(article_ID):
     rows = session.execute("DELETE FROM articles WHERE article_id="+str(article_ID))
-    return ""
+    objects = []
+    result = {}
+    result["Status:"] = "OK"
+    objects.append(result)
+    resp = jsonify(objects)
+    resp.status_code = 201
+    return resp
 
 
 '''#############################################################################
