@@ -15,7 +15,9 @@ Once foreman has started, compare the ports for each service with the ports in t
 
 Start Scylla: `docker start scylla`
 Create the databases: `cd db/cmd/ && python3 scylla_create_all.py`
+
 Fill the databases: `cd db/cmd/ && python3 scylla_fill_all.py`
+
 To delete database: `cd db/cmd/ && python3 scylla_destroy_all.py`
 
 
