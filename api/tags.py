@@ -21,8 +21,8 @@ import json
 import uuid
 
 
-PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
-DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'tags.db')
+#PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
+#DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'tags.db')
 
 
 app = flask.Flask(__name__)

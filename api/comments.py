@@ -19,8 +19,8 @@ import json
 import uuid
 
 
-PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
-DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'comments.db')
+#PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
+#DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'comments.db')
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True

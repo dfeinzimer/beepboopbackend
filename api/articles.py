@@ -14,8 +14,8 @@ from flask_basicauth import BasicAuth
 import os
 
 
-PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
-DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'articles.db')
+#PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
+#DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'articles.db')
 
 
 app = flask.Flask(__name__)

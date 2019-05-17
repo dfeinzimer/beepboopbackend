@@ -13,8 +13,8 @@ from flask_basicauth import BasicAuth
 import os
 import base64
 
-PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
-DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'users.db')
+#PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
+#DATABASE = os.path.join(PROJECT_ROOT, '..', 'db', 'db', 'users.db')
 
 
 app = flask.Flask(__name__)
